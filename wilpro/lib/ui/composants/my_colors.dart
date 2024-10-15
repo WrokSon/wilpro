@@ -5,4 +5,5 @@ class MyColors {
   static const blue = Color.fromARGB(255, 22, 0, 148);
   static const black = Colors.black;
   static const white = Colors.white;
+  static const backgroundNavBar = Color.fromARGB(255, 224, 224, 224);
 }

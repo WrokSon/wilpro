@@ -10,7 +10,7 @@ class MyNavBar extends StatefulWidget {
 }
 
 class _MyNavBar extends State<MyNavBar> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   _changeView(int index) {
     _selectedIndex = index;
@@ -29,7 +29,7 @@ class _MyNavBar extends State<MyNavBar> {
           _changeView(index);
         },
         child: Container(
-          color: MyColors.white,
+          color: MyColors.backgroundNavBar,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -42,7 +42,7 @@ class _MyNavBar extends State<MyNavBar> {
                           color:
                               _selectedIndex == index ? selected : unselected),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           ),
         ),
@@ -57,7 +57,8 @@ class _MyNavBar extends State<MyNavBar> {
         MediaQuery.of(context).size.width;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth(context) * 0.1),
-      height: screenHeight * 0.1,
+      height: screenHeight * 0.07,
+      color: MyColors.backgroundNavBar,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
