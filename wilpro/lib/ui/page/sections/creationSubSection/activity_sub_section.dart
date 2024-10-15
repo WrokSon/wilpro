@@ -19,12 +19,15 @@ class _ActivitySubSection extends State<ActivitySubSection> {
         child: Column(
           children: [
             Expanded(
-              child: ListView(
-                children: [
-                  ActivityItem(
-                      item: Activity(id: "id", title: "title", tasks: []))
-                ],
-              ),
+              child: GridView.builder(
+                  padding: const EdgeInsets.all(10),
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200),
+                  itemCount: 10,
+                  itemBuilder: (BuildContext context, int index) =>
+                      ActivityItem(
+                          item: Activity(
+                              id: "id", title: "title $index", tasks: []))),
             ),
             MyWidgets.button(
               text: "AJOUTER",
