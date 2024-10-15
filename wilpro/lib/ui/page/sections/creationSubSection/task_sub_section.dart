@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/model/task.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
 
@@ -22,6 +23,17 @@ class _TaskSubSection extends State<TaskSubSection> {
   // vue
   @override
   Widget build(BuildContext context) {
+    final tasks = [
+      Task(id: "", title: "Gainage", withTimer: true),
+      Task(id: "", title: "Marcher", withTimer: true),
+      Task(id: "", title: "Pompes", withTimer: false),
+      Task(id: "", title: "Squats", withTimer: false),
+      Task(id: "", title: "Traction", withTimer: false),
+      Task(id: "", title: "Sauter", withTimer: false),
+      Task(id: "", title: "Repo", withTimer: true),
+      Task(id: "", title: "Manger", withTimer: false),
+    ];
+
     return Expanded(
       child: Column(
         children: [
@@ -29,13 +41,16 @@ class _TaskSubSection extends State<TaskSubSection> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: tasks.length,
                 itemBuilder: (context, index) => Container(
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   padding: const EdgeInsets.all(10),
                   color: MyColors.backgroundNavBar,
                   child: MyWidgets.simpleItemList(
-                      startText: "startText", endText: ""),
+                      startText: tasks[index].title,
+                      endText: tasks[index].withTimer
+                          ? "Avec chrono"
+                          : "Sans chrono"),
                 ),
               ),
             ),
@@ -55,12 +70,20 @@ class _TaskSubSection extends State<TaskSubSection> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      tasks.add(Task(
+                          id: "id",
+                          title: newTaskController.text.trim(),
+                          withTimer: true));
+                    });
+                    newTaskController.clear();
+                  },
                   icon: const Icon(Icons.add),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

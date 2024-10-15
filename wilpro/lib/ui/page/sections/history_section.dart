@@ -14,7 +14,7 @@ class _HistorySection extends State<HistorySection> {
     return Container(
       color: MyColors.background,
       child: const Center(
-        child: Text("Historique"),
+        child: Text("A venir :)"),
       ),
     );
   }

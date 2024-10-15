@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
+import 'package:wilpro/ui/composants/my_image.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
 
 class MyMeteo extends StatefulWidget {
@@ -10,6 +12,11 @@ class MyMeteo extends StatefulWidget {
 }
 
 class _MyMeteo extends State<MyMeteo> {
+  final String _idIcon = "10d";
+  final double degres = -1;
+  final String description = "...";
+  // final _city = "orleans";
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,21 +27,21 @@ class _MyMeteo extends State<MyMeteo> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MyWidgets.text(text: "00:00:00", size: 30),
+            MyWidgets.text(text: Tools.timeString(DateTime.now()), size: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  color: Colors.black,
                   height: 100,
                   width: 100,
+                  child: MyImage.network(Tools.getURLImageMeteo(_idIcon)),
                 ),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    MyWidgets.text(text: "19°C"),
-                    MyWidgets.text(text: "Ensoleillé"),
+                    MyWidgets.text(text: '${degres.toInt()}°C'),
+                    MyWidgets.text(text: description),
                   ],
                 )
               ],

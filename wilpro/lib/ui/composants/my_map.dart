@@ -11,7 +11,7 @@ class MyMap extends StatefulWidget {
 
 class _HomePage extends State<MyMap> {
   late MapController _mapController;
-  final _currentPosition = const LatLng(0, 0);
+  final _currentPosition = const LatLng(48.866667, 2.333333);
 
   @override
   void initState() {
@@ -32,7 +32,10 @@ class _HomePage extends State<MyMap> {
       height: 300,
       width: double.infinity,
       child: FlutterMap(
-        options: const MapOptions(initialZoom: 13),
+        options: MapOptions(
+          initialZoom: 13,
+          initialCenter: _currentPosition,
+        ),
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

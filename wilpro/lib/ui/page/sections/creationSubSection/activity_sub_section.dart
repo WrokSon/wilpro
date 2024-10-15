@@ -23,7 +23,7 @@ class _ActivitySubSection extends State<ActivitySubSection> {
                   padding: const EdgeInsets.all(10),
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200),
-                  itemCount: 10,
+                  itemCount: 7,
                   itemBuilder: (BuildContext context, int index) =>
                       ActivityItem(
                           item: Activity(
