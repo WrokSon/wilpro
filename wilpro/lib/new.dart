@@ -4,10 +4,10 @@ class NewPage extends StatefulWidget {
   const NewPage({super.key});
 
   @override
-  State<NewPage> createState() => _HomePage();
+  State<NewPage> createState() => _NewPage();
 }
 
-class _HomePage extends State<NewPage> {
+class _NewPage extends State<NewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 
 class MyWidgets {
-  // button
+  // normal button
   static Widget button({
     required String text,
     required void Function() onTap,
@@ -44,6 +44,41 @@ class MyWidgets {
         fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
         fontSize: size,
         color: color,
+      ),
+    );
+  }
+
+  // item d'un liste
+  static Widget simpleItemList({
+    required String startText,
+    required String endText,
+    bool withPoint = false,
+    double spaceStart = 4,
+    EdgeInsetsGeometry margin = EdgeInsets.zero,
+    double sizeText = 10,
+    bool isBold = true,
+  }) {
+    return Container(
+      margin: margin,
+      width: double.infinity,
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                withPoint
+                    ? const Icon(
+                        Icons.circle,
+                        size: 8,
+                      )
+                    : const SizedBox(),
+                withPoint ? SizedBox(width: spaceStart) : const SizedBox(),
+                text(text: startText, size: sizeText, isBold: isBold),
+              ],
+            ),
+          ),
+          text(text: endText, size: sizeText, isBold: isBold),
+        ],
       ),
     );
   }
