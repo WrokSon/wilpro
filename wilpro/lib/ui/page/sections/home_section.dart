@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_map.dart';
 import 'package:wilpro/ui/composants/my_meteo.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
@@ -15,8 +16,9 @@ class _HomeSection extends State<HomeSection> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         width: double.infinity,
+        color: MyColors.background,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

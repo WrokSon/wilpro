@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/ui/composants/my_colors.dart';
 
 class MyWidgets {
   // button
@@ -7,15 +8,25 @@ class MyWidgets {
     required void Function() onTap,
     double height = 60,
     double width = 200,
+    bool inverseColor = true,
   }) {
     return SizedBox(
       height: height,
       width: width,
       child: ElevatedButton(
         onPressed: onTap,
+        style: ButtonStyle(
+            shape: const WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  side: BorderSide(color: MyColors.blue)),
+            ),
+            backgroundColor: WidgetStatePropertyAll(
+                inverseColor ? MyColors.white : MyColors.blue)),
         child: Text(
           text,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(
+              color: inverseColor ? MyColors.blue : MyColors.background),
         ),
       ),
     );

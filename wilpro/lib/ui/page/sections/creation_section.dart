@@ -12,9 +12,9 @@ class _CreationSection extends State<CreationSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: MyColors.white,
+      color: MyColors.background,
       child: const Center(
-        child: Text("Creation"),
+        child: Text("Création"),
       ),
     );
   }

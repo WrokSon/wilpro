@@ -12,7 +12,7 @@ class _HistorySection extends State<HistorySection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: MyColors.white,
+      color: MyColors.background,
       child: const Center(
         child: Text("Historique"),
       ),
