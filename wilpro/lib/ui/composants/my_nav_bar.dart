@@ -57,7 +57,7 @@ class _MyNavBar extends State<MyNavBar> {
         MediaQuery.of(context).size.width;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth(context) * 0.1),
-      height: screenHeight * 0.07,
+      height: screenHeight * 0.08,
       color: MyColors.backgroundNavBar,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
