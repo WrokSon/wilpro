@@ -1,5 +1,5 @@
 class Task {
-  String id;
+  final String id;
   String title;
   bool withTimer;
 
