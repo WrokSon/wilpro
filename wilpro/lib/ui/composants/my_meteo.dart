@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/model/enum/format_time_enum.dart';
 import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_image.dart';
@@ -27,11 +28,14 @@ class _MyMeteo extends State<MyMeteo> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MyWidgets.text(text: Tools.timeString(DateTime.now()), size: 30),
+            MyWidgets.text(
+                text: Tools.timeString(DateTime.now(),
+                    format: FormatTimeEnum.hhmmss),
+                size: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   height: 100,
                   width: 100,
                   child: MyImage.network(Tools.getURLImageMeteo(_idIcon)),
