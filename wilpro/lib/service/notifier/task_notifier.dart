@@ -4,7 +4,48 @@ import 'package:wilpro/model/task.dart';
 
 class TaskNotifier with ChangeNotifier {
   static final TaskNotifier instance = TaskNotifier._();
-  final List<Task> _tasks = [];
+  final List<Task> _tasks = [
+    Task(
+      id: "pompe",
+      title: "pompes",
+      withTimer: false,
+    ),
+    Task(
+      id: "marche",
+      title: "Marcher",
+      withTimer: true,
+    ),
+    Task(
+      id: "jouer",
+      title: "Jouer",
+      withTimer: true,
+    ),
+    Task(
+      id: "mange",
+      title: "Manger",
+      withTimer: true,
+    ),
+    Task(
+      id: "etude",
+      title: "Etude",
+      withTimer: true,
+    ),
+    Task(
+      id: "musique",
+      title: "Musique",
+      withTimer: true,
+    ),
+    Task(
+      id: "repo",
+      title: "Repo",
+      withTimer: true,
+    ),
+    Task(
+      id: "dodo",
+      title: "Dormir",
+      withTimer: true,
+    ),
+  ];
 
   // constructeur privée
   TaskNotifier._();

@@ -16,7 +16,7 @@ class _ActivityItem extends State<ActivityItem> {
   @override
   Widget build(BuildContext context) {
     final notifier = ActivityNotifier.instance;
-    final listTasks = [];
+    final listTasks = notifier.getListTaskStringById(widget.item.id);
 
     return Container(
       margin: const EdgeInsets.all(10),
@@ -30,14 +30,19 @@ class _ActivityItem extends State<ActivityItem> {
               alignment: Alignment.center,
               width: double.infinity,
               child: MyWidgets.text(
-                  text: widget.item.title, color: MyColors.white)),
+                  text: widget.item.title.length > 12
+                      ? "${widget.item.title.substring(0, 12)}..."
+                      : widget.item.title,
+                  color: MyColors.white)),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(5),
-              itemCount: widget.item.tasks.length,
+              itemCount: listTasks.length,
               itemBuilder: (BuildContext context, int index) =>
                   MyWidgets.simpleItemList(
-                      startText: "startText ${index}",
+                      startText: listTasks[index].length > 18
+                          ? "${listTasks[index].substring(0, 18)}..."
+                          : listTasks[index],
                       endText: "",
                       withPoint: true),
             ),
