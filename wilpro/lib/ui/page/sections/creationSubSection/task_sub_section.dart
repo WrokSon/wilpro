@@ -13,6 +13,8 @@ class TaskSubSection extends StatefulWidget {
 class _TaskSubSection extends State<TaskSubSection> {
   // textfield
   final newTaskController = TextEditingController();
+  // notifier
+  final notifier = TaskNotifier.instance;
 
   @override
   void dispose() {
@@ -20,20 +22,76 @@ class _TaskSubSection extends State<TaskSubSection> {
     newTaskController.dispose();
   }
 
+  // popup pour ajouter
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        bool isCheck = false;
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextFormField(
+                  maxLength: 70,
+                  controller: newTaskController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                DropdownButton<bool>(
+                  items: [
+                    DropdownMenuItem(
+                      value: true,
+                      child: MyWidgets.text(text: "AVEC chrno"),
+                    ),
+                    DropdownMenuItem(
+                      value: false,
+                      child: MyWidgets.text(text: "SANS chrno"),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    isCheck = value!;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            MyWidgets.button(
+              text: "VALIDER",
+              onTap: () {
+                Navigator.of(context).pop();
+                final title = newTaskController.text.trim();
+                if (title.isNotEmpty) {
+                  notifier.addTask(title: title, withTimer: isCheck);
+                }
+                newTaskController.clear();
+              },
+              width: double.infinity,
+              height: 40,
+              inverseColor: false,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // vue
   @override
   Widget build(BuildContext context) {
-    final notifier = TaskNotifier.instance;
     final tasks = notifier.taks;
 
     return ListenableBuilder(
       listenable: notifier,
       builder: (BuildContext context, Widget? child) => Expanded(
-        child: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Expanded(
                 child: ListView.builder(
                   itemCount: tasks.length,
                   itemBuilder: (context, index) => Container(
@@ -48,14 +106,29 @@ class _TaskSubSection extends State<TaskSubSection> {
                   ),
                 ),
               ),
-            ),
-            Container(
+              MyWidgets.button(
+                text: "AJOUTER",
+                onTap: () {
+                  _showMyDialog();
+                },
+                inverseColor: false,
+                width: double.infinity,
+                height: 50,
+              ),
+              /*Container(
               padding: const EdgeInsets.all(10),
               alignment: Alignment.center,
               height: 80,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Checkbox(
+                      value: isCheck,
+                      onChanged: (value) {
+                        setState(() {
+                          isCheck = !isCheck;
+                        });
+                      }),
                   Expanded(
                     child: TextFormField(
                       maxLength: 70,
@@ -70,7 +143,7 @@ class _TaskSubSection extends State<TaskSubSection> {
                       setState(() {
                         notifier.addTask(
                             title: newTaskController.text.trim(),
-                            withTimer: true);
+                            withTimer: isCheck);
                       });
                       newTaskController.clear();
                     },
@@ -78,8 +151,9 @@ class _TaskSubSection extends State<TaskSubSection> {
                   ),
                 ],
               ),
-            ),
-          ],
+            ),*/
+            ],
+          ),
         ),
       ),
     );
