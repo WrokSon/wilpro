@@ -13,21 +13,27 @@ class ActivitySubSection extends StatefulWidget {
 class _ActivitySubSection extends State<ActivitySubSection> {
   @override
   Widget build(BuildContext context) {
+    final activities = [Activity(id: "id", title: "title", tasks: [])];
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             Expanded(
-              child: GridView.builder(
-                  padding: const EdgeInsets.all(10),
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200),
-                  itemCount: 7,
-                  itemBuilder: (BuildContext context, int index) =>
-                      ActivityItem(
-                          item: Activity(
-                              id: "id", title: "title $index", tasks: []))),
+              child: activities.isNotEmpty
+                  ? GridView.builder(
+                      padding: const EdgeInsets.all(10),
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200),
+                      itemCount: activities.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          ActivityItem(item: activities[index]))
+                  : Center(
+                      child: MyWidgets.text(
+                          text: "Il n'y a pas d'activité enregistré"),
+                    ),
             ),
             MyWidgets.button(
               text: "AJOUTER",

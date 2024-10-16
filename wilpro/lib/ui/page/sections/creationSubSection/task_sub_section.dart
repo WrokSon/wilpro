@@ -92,19 +92,24 @@ class _TaskSubSection extends State<TaskSubSection> {
           child: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) => Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    padding: const EdgeInsets.all(10),
-                    color: MyColors.backgroundNavBar,
-                    child: MyWidgets.simpleItemList(
-                        startText: tasks[index].title,
-                        endText: tasks[index].withTimer
-                            ? "Avec chrono"
-                            : "Sans chrono"),
-                  ),
-                ),
+                child: tasks.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: tasks.length,
+                        itemBuilder: (context, index) => Container(
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.all(10),
+                          color: MyColors.backgroundNavBar,
+                          child: MyWidgets.simpleItemList(
+                              startText: tasks[index].title,
+                              endText: tasks[index].withTimer
+                                  ? "Avec chrono"
+                                  : "Sans chrono"),
+                        ),
+                      )
+                    : Center(
+                        child: MyWidgets.text(
+                            text: "Il n'y a pas de tache enregistré"),
+                      ),
               ),
               MyWidgets.button(
                 text: "AJOUTER",
@@ -115,43 +120,6 @@ class _TaskSubSection extends State<TaskSubSection> {
                 width: double.infinity,
                 height: 50,
               ),
-              /*Container(
-              padding: const EdgeInsets.all(10),
-              alignment: Alignment.center,
-              height: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                      value: isCheck,
-                      onChanged: (value) {
-                        setState(() {
-                          isCheck = !isCheck;
-                        });
-                      }),
-                  Expanded(
-                    child: TextFormField(
-                      maxLength: 70,
-                      controller: newTaskController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        notifier.addTask(
-                            title: newTaskController.text.trim(),
-                            withTimer: isCheck);
-                      });
-                      newTaskController.clear();
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                ],
-              ),
-            ),*/
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
+import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
 
@@ -14,6 +15,9 @@ class ActivityItem extends StatefulWidget {
 class _ActivityItem extends State<ActivityItem> {
   @override
   Widget build(BuildContext context) {
+    final notifier = ActivityNotifier.instance;
+    final listTasks = [];
+
     return Container(
       margin: const EdgeInsets.all(10),
       height: 150,
@@ -30,7 +34,7 @@ class _ActivityItem extends State<ActivityItem> {
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(5),
-              itemCount: 10,
+              itemCount: widget.item.tasks.length,
               itemBuilder: (BuildContext context, int index) =>
                   MyWidgets.simpleItemList(
                       startText: "startText ${index}",

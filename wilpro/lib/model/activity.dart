@@ -1,7 +1,12 @@
+import 'package:wilpro/model/quantity.dart';
+
 class Activity {
-  String id;
+  final String id;
   String title;
-  List<String>? tasks;
+  List<Quantity> tasks;
 
   Activity({required this.id, required this.title, required this.tasks});
+
+  
+
 }
