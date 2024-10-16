@@ -13,7 +13,7 @@ class MyMeteo extends StatefulWidget {
 
 class _MyMeteo extends State<MyMeteo> {
   final String _idIcon = "10d";
-  final double degres = -1;
+  final double degres = -999;
   final String description = "...";
   // final _city = "orleans";
 

@@ -34,7 +34,7 @@ class _TaskSubSection extends State<TaskSubSection> {
             child: ListBody(
               children: <Widget>[
                 TextFormField(
-                  maxLength: 70,
+                  maxLength: 50,
                   controller: newTaskController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
