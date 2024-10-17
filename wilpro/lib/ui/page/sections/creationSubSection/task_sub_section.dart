@@ -30,7 +30,7 @@ class _TaskSubSection extends State<TaskSubSection> {
         bool isCheck = false;
         return AlertDialog(
           content: SingleChildScrollView(
-            child: ListBody(
+            child: Column(
               children: <Widget>[
                 TextFormField(
                   maxLength: 50,
@@ -40,7 +40,9 @@ class _TaskSubSection extends State<TaskSubSection> {
                     counterText: "",
                   ),
                 ),
-                DropdownButton<bool>(
+                const SizedBox(height: 5),
+                DropdownButtonFormField<bool>(
+                  value: true,
                   items: [
                     DropdownMenuItem(
                       value: true,
@@ -54,6 +56,14 @@ class _TaskSubSection extends State<TaskSubSection> {
                   onChanged: (value) {
                     isCheck = value!;
                   },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: MyColors
+                              .blue), // Couleur de la bordure du champ en cas de focus
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -107,8 +117,7 @@ class _TaskSubSection extends State<TaskSubSection> {
                         ),
                       )
                     : Center(
-                        child: MyWidgets.text(
-                            text: "Pas de tache"),
+                        child: MyWidgets.text(text: "Pas de tache"),
                       ),
               ),
               MyWidgets.button(

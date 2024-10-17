@@ -23,22 +23,24 @@ class _ActivitySubSection extends State<ActivitySubSection> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            Expanded(
-              child: activities.isNotEmpty
-                  ? ListenableBuilder(
-                      builder: (context, child) => GridView.builder(
+            ListenableBuilder(
+              builder: (context, child) {
+                return Expanded(
+                  child: activities.isNotEmpty
+                      ? GridView.builder(
                           padding: const EdgeInsets.all(10),
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
                                   maxCrossAxisExtent: 200),
                           itemCount: activities.length,
                           itemBuilder: (BuildContext context, int index) =>
-                              ActivityItem(item: activities[index])),
-                      listenable: notifier,
-                    )
-                  : Center(
-                      child: MyWidgets.text(text: "Pas d'activité"),
-                    ),
+                              ActivityItem(item: activities[index]))
+                      : Center(
+                          child: MyWidgets.text(text: "Pas d'activité"),
+                        ),
+                );
+              },
+              listenable: notifier,
             ),
             MyWidgets.button(
               text: "AJOUTER",

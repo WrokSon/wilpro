@@ -32,8 +32,8 @@ class ActivityNotifier with ChangeNotifier {
 
   // ajouter une activiter
   void addActivity({required String title, required List<Quantity> tasks}) {
-    _activities
-        .add(Activity(id: const Uuid().v1(), title: title, tasks: tasks));
+    _activities.add(
+        Activity(id: const Uuid().v1(), title: title.trim(), tasks: tasks));
     notifyListeners();
   }
 
