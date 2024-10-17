@@ -4,6 +4,7 @@ import 'package:wilpro/model/task.dart';
 
 class TaskNotifier with ChangeNotifier {
   static final TaskNotifier instance = TaskNotifier._();
+  
   final List<Task> _tasks = [
     Task(
       id: "pompe",

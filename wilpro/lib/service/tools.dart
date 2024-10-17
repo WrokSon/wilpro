@@ -22,8 +22,8 @@ class Tools {
           return "${twoDigits(time.minute)}min${twoDigits(time.second)}";
         case FormatTimeEnum.auto:
         default:
-          if(time.hour<=0){
-            if(time.minute<=0){
+          if (time.hour <= 0) {
+            if (time.minute <= 0) {
               return "${twoDigits(time.second)}s";
             }
             return "${twoDigits(time.minute)}min${twoDigits(time.second)}";
@@ -44,18 +44,21 @@ class Tools {
         }
         return "${twoDigits(time.minute)}:${twoDigits(time.second)}";
       case FormatTimeEnum.auto:
-        default:
-          if(time.hour<=0){
-            if(time.minute<=0){
-              return twoDigits(time.second);
-            }
-            return "${twoDigits(time.minute)}:${twoDigits(time.second)}";
+      default:
+        if (time.hour <= 0) {
+          if (time.minute <= 0) {
+            return twoDigits(time.second);
           }
-          return "${twoDigits(time.hour)}:${twoDigits(time.minute)}:${twoDigits(time.second)}";
+          return "${twoDigits(time.minute)}:${twoDigits(time.second)}";
+        }
+        return "${twoDigits(time.hour)}:${twoDigits(time.minute)}:${twoDigits(time.second)}";
     }
   }
 
   // url image meteo
   static String getURLImageMeteo(String icon) =>
       "https://openweathermap.org/img/wn/$icon@2x.png";
+
+  static int stringToInt(String value) =>
+      int.parse(value.trim().replaceFirst(RegExp(r'^0+'), ''));
 }

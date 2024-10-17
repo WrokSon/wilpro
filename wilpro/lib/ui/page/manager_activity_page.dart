@@ -2,33 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/model/quantity.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
+import 'package:wilpro/service/notifier/manager_activity_notifier.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/ui/composants/item/task_in_activity_item.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
 
-class ManageActivityPage extends StatefulWidget {
-  const ManageActivityPage({super.key, required this.item});
+class ManagerActivityPage extends StatefulWidget {
+  const ManagerActivityPage({super.key, required this.item});
   final Activity item;
   static const nameReoute = "/manageAcctivity";
 
   @override
-  State<ManageActivityPage> createState() => _ManageActivityPage();
+  State<ManagerActivityPage> createState() => _ManagerActivityPage();
 }
 
-class _ManageActivityPage extends State<ManageActivityPage> {
+class _ManagerActivityPage extends State<ManagerActivityPage> {
   // Notifier
   final taskNotifier = TaskNotifier.instance;
   final activityNotifier = ActivityNotifier.instance;
+  final managerActivityNotifier = ManagerActivityNotifier.instance;
   // controller text
   final titleController = TextEditingController();
-  // taches
-  List<Quantity> tasks = [
-    Quantity(value: 20, idTask: "pompe"),
-    Quantity(
-        value: DateTime(0, 0, 0, 12, 5, 15).microsecondsSinceEpoch,
-        idTask: "jouer")
-  ];
 
   @override
   void dispose() {
@@ -50,35 +45,37 @@ class _ManageActivityPage extends State<ManageActivityPage> {
               children: [
                 MyWidgets.text(text: "Votre choix"),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: listTasks.length,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        // add
-                        Navigator.of(context).pop();
-                        setState(() {
-                          tasks.add(
-                            Quantity(
-                                value: listTasks[index].withTimer
-                                    ? DateTime(0, 0, 0, 12, 5, 15)
-                                        .microsecondsSinceEpoch
-                                    : 20,
-                                idTask: listTasks[index].id),
-                          );
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        padding: const EdgeInsets.all(10),
-                        color: MyColors.backgroundNavBar,
-                        child: MyWidgets.simpleItemList(
-                            startText: listTasks[index].title,
-                            endText: listTasks[index].withTimer
-                                ? "Avec chrono"
-                                : "Sans chrono"),
-                      ),
-                    ),
-                  ),
+                  child: ListenableBuilder(
+                      listenable: managerActivityNotifier,
+                      builder: (context, child) {
+                        return ListView.builder(
+                          itemCount: listTasks.length,
+                          itemBuilder: (context, index) => GestureDetector(
+                            onTap: () {
+                              // add
+                              Navigator.of(context).pop();
+                              setState(() {
+                                managerActivityNotifier.addToeditActivityList(
+                                    value: listTasks[index].withTimer
+                                        ? DateTime(0, 0, 0, 0, 5, 0)
+                                            .microsecondsSinceEpoch
+                                        : 1,
+                                    idTask: listTasks[index].id);
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              padding: const EdgeInsets.all(10),
+                              color: MyColors.backgroundNavBar,
+                              child: MyWidgets.simpleItemList(
+                                  startText: listTasks[index].title,
+                                  endText: listTasks[index].withTimer
+                                      ? "Avec chrono"
+                                      : "Sans chrono"),
+                            ),
+                          ),
+                        );
+                      }),
                 ),
               ],
             ),
@@ -91,6 +88,7 @@ class _ManageActivityPage extends State<ManageActivityPage> {
   @override
   Widget build(BuildContext context) {
     bool isAddView = !activityNotifier.isExistById(widget.item.id);
+    List<Quantity> tasks = managerActivityNotifier.editList;
     return Scaffold(
       appBar: AppBar(
         title: Text(isAddView ? "Ajouter" : "Modifier"),
@@ -126,16 +124,19 @@ class _ManageActivityPage extends State<ManageActivityPage> {
                 ],
               ),
               Expanded(
-                child: tasks.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: tasks.length,
-                        itemBuilder: (context, index) =>
-                            TaskInActivityItem(item: tasks[index]),
-                      )
-                    : Center(
-                        child: MyWidgets.text(
-                            text: "Votre Activité n'a pas de taches"),
-                      ),
+                child: ListenableBuilder(
+                  builder: (context, child) => tasks.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: tasks.length,
+                          itemBuilder: (context, index) =>
+                              TaskInActivityItem(item: tasks[index]),
+                        )
+                      : Center(
+                          child: MyWidgets.text(
+                              text: "Votre Activité n'a pas de taches"),
+                        ),
+                  listenable: managerActivityNotifier,
+                ),
               ),
               MyWidgets.button(
                 text: "VALIDER",

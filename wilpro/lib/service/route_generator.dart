@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
-import 'package:wilpro/ui/page/manage_activity_page.dart';
+import 'package:wilpro/ui/page/manager_activity_page.dart';
 import 'package:wilpro/ui/page/section_page.dart';
 
 class RouteGenerator {
@@ -8,9 +8,9 @@ class RouteGenerator {
     switch (settings.name) {
       case SectionPage.nameReoute:
         return MaterialPageRoute(builder: (context) => const SectionPage());
-      case ManageActivityPage.nameReoute:
+      case ManagerActivityPage.nameReoute:
         return MaterialPageRoute(
-            builder: (context) => ManageActivityPage(
+            builder: (context) => ManagerActivityPage(
                   item: settings.arguments as Activity,
                 ));
       default:
