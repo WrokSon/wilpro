@@ -108,7 +108,7 @@ class _TaskSubSection extends State<TaskSubSection> {
                       )
                     : Center(
                         child: MyWidgets.text(
-                            text: "Il n'y a pas de tache enregistré"),
+                            text: "Pas de tache"),
                       ),
               ),
               MyWidgets.button(

@@ -29,7 +29,7 @@ class _MyMeteo extends State<MyMeteo> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             MyWidgets.text(
-                text: Tools.timeString(DateTime.now(),
+                text: Tools.timeString2(DateTime.now(),
                     format: FormatTimeEnum.hhmmss),
                 size: 30),
             Row(

@@ -37,8 +37,7 @@ class _ActivitySubSection extends State<ActivitySubSection> {
                       listenable: notifier,
                     )
                   : Center(
-                      child: MyWidgets.text(
-                          text: "Il n'y a pas d'activité enregistré"),
+                      child: MyWidgets.text(text: "Pas d'activité"),
                     ),
             ),
             MyWidgets.button(

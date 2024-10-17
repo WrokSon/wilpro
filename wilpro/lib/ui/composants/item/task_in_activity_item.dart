@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wilpro/model/quantity.dart';
+import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/service/notifier/manager_activity_notifier.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/service/tools.dart';
@@ -68,8 +69,7 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
   // popup pour avec timer
   Future<void> _showMyTimerDialog() async {
     final keyForm = GlobalKey<FormState>(); // Clé pour le formulaire
-    final DateTime timeValue =
-        DateTime.fromMicrosecondsSinceEpoch(widget.item.value);
+    final MyTime timeValue = MyTime.fromValue(widget.item.value);
     hourController.text = Tools.twoDigits(timeValue.hour);
     minuteController.text = Tools.twoDigits(timeValue.minute);
     secondeController.text = Tools.twoDigits(timeValue.second);
@@ -108,19 +108,14 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
               text: "CHANGER",
               onTap: () {
                 // Todo: probleme au niveau des champs
-                print(
-                    "${Tools.stringToInt(hourController.text)}h${Tools.stringToInt(minuteController.text)}min${Tools.stringToInt(secondeController.text)}");
                 if (keyForm.currentState!.validate()) {
                   managerActivityNotifier.editToeditActivityList(
                     id: widget.item.id,
-                    value: DateTime(
-                      0,
-                      0,
-                      0,
-                      Tools.stringToInt(hourController.text),
-                      Tools.stringToInt(minuteController.text),
-                      Tools.stringToInt(secondeController.text),
-                    ).millisecondsSinceEpoch,
+                    value: MyTime(
+                      hour: Tools.stringToInt(hourController.text),
+                      minute: Tools.stringToInt(minuteController.text),
+                      second: Tools.stringToInt(secondeController.text),
+                    ).getValue(),
                   );
                 }
                 Navigator.pop(context);
@@ -150,8 +145,7 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
             },
             child: MyWidgets.text(
                 text: task.withTimer
-                    ? Tools.timeString(
-                        DateTime.fromMicrosecondsSinceEpoch(widget.item.value),
+                    ? Tools.timeString(MyTime.fromValue(widget.item.value),
                         enLettre: true)
                     : widget.item.value.toString(),
                 size: 10),

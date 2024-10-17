@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/model/quantity.dart';
+import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/manager_activity_notifier.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
@@ -48,33 +49,39 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
                   child: ListenableBuilder(
                       listenable: managerActivityNotifier,
                       builder: (context, child) {
-                        return ListView.builder(
-                          itemCount: listTasks.length,
-                          itemBuilder: (context, index) => GestureDetector(
-                            onTap: () {
-                              // add
-                              Navigator.of(context).pop();
-                              setState(() {
-                                managerActivityNotifier.addToeditActivityList(
-                                    value: listTasks[index].withTimer
-                                        ? DateTime(0, 0, 0, 0, 5, 0)
-                                            .microsecondsSinceEpoch
-                                        : 1,
-                                    idTask: listTasks[index].id);
-                              });
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(vertical: 5),
-                              padding: const EdgeInsets.all(10),
-                              color: MyColors.backgroundNavBar,
-                              child: MyWidgets.simpleItemList(
-                                  startText: listTasks[index].title,
-                                  endText: listTasks[index].withTimer
-                                      ? "Avec chrono"
-                                      : "Sans chrono"),
-                            ),
-                          ),
-                        );
+                        return listTasks.isNotEmpty
+                            ? ListView.builder(
+                                itemCount: listTasks.length,
+                                itemBuilder: (context, index) =>
+                                    GestureDetector(
+                                  onTap: () {
+                                    // add
+                                    Navigator.of(context).pop();
+                                    setState(() {
+                                      managerActivityNotifier
+                                          .addToeditActivityList(
+                                              value: listTasks[index].withTimer
+                                                  ? MyTime(minute: 5).getValue()
+                                                  : 1,
+                                              idTask: listTasks[index].id);
+                                    });
+                                  },
+                                  child: Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    padding: const EdgeInsets.all(10),
+                                    color: MyColors.backgroundNavBar,
+                                    child: MyWidgets.simpleItemList(
+                                        startText: listTasks[index].title,
+                                        endText: listTasks[index].withTimer
+                                            ? "Avec chrono"
+                                            : "Sans chrono"),
+                                  ),
+                                ),
+                              )
+                            : Center(
+                                child: MyWidgets.text(text: "Pas de tache"),
+                              );
                       }),
                 ),
               ],
@@ -96,56 +103,66 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
       ),
       body: Container(
         color: MyColors.background,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MyWidgets.text(text: "Titre"),
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                child: TextFormField(
-                  controller: titleController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
+        padding: const EdgeInsets.all(10),
+        child: ListenableBuilder(
+          builder: (context, child) =>
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            MyWidgets.text(text: "Titre"),
+            Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              child: TextFormField(
+                controller: titleController,
+                maxLength: 100,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  counterText: "",
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyWidgets.text(text: "Liste des taches"),
-                  IconButton(
-                    onPressed: () {
-                      _showMyAddDialog();
-                    },
-                    icon: const Icon(Icons.add, color: MyColors.blue),
-                  )
-                ],
-              ),
-              Expanded(
-                child: ListenableBuilder(
-                  builder: (context, child) => tasks.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: tasks.length,
-                          itemBuilder: (context, index) =>
-                              TaskInActivityItem(item: tasks[index]),
-                        )
-                      : Center(
-                          child: MyWidgets.text(
-                              text: "Votre Activité n'a pas de taches"),
-                        ),
-                  listenable: managerActivityNotifier,
-                ),
-              ),
-              MyWidgets.button(
-                text: "VALIDER",
-                onTap: () {},
-                inverseColor: false,
-                width: double.infinity,
-              )
-            ],
-          ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MyWidgets.text(text: "Liste des taches"),
+                IconButton(
+                  onPressed: () {
+                    _showMyAddDialog();
+                  },
+                  icon: const Icon(Icons.add, color: MyColors.blue),
+                )
+              ],
+            ),
+            Expanded(
+              child: tasks.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) =>
+                          TaskInActivityItem(item: tasks[index]),
+                    )
+                  : Center(
+                      child: MyWidgets.text(
+                          text: "Votre Activité n'a pas de taches"),
+                    ),
+            ),
+            MyWidgets.button(
+              text: "VALIDER",
+              onTap: () {
+                final title = titleController.text;
+                final listTasks = managerActivityNotifier.editList;
+                // NB : activityNotifier.isExistByTitle(title) -> true quand ça n'existe pas
+                if (title.isNotEmpty &&
+                    activityNotifier.isExistByTitle(title) &&
+                    listTasks.isNotEmpty) {
+                  activityNotifier.addActivity(
+                      title: title, tasks: List.from(listTasks));
+                  Navigator.pop(context);
+                  managerActivityNotifier.clearEditList();
+                }
+              },
+              inverseColor: false,
+              width: double.infinity,
+            )
+          ]),
+          listenable: managerActivityNotifier,
         ),
       ),
     );

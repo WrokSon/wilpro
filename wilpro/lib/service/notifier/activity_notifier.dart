@@ -1,88 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/model/quantity.dart';
+import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/model/task.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/service/tools.dart';
 
 class ActivityNotifier with ChangeNotifier {
-  final List<Activity> _activities = [
-    Activity(id: "id", title: "Ma routine", tasks: [
-      Quantity(id: "id5", value: 10, idTask: "pompe"),
-      Quantity(
-          id: "id2",
-          value: DateTime(0, 0, 0, 0, 30, 0).microsecondsSinceEpoch,
-          idTask: "repo"),
-      Quantity(id: "id3", value: 10, idTask: "marche"),
-      Quantity(
-          id: "id6",
-          value: DateTime(0, 0, 0, 0, 15, 0).microsecondsSinceEpoch,
-          idTask: "mange"),
-    ]),
-    Activity(id: "id2", title: "Sport", tasks: [
-      Quantity(id: "id7", value: 30, idTask: "pompe"),
-      Quantity(
-          id: "id8",
-          value: DateTime(0, 0, 0, 0, 1, 0).microsecondsSinceEpoch,
-          idTask: "repo"),
-      Quantity(id: "id9", value: 30, idTask: "pompe"),
-      Quantity(
-          id: "id10",
-          value: DateTime(0, 0, 0, 0, 1, 0).microsecondsSinceEpoch,
-          idTask: "repo"),
-      Quantity(id: "id11", value: 30, idTask: "pompe"),
-      Quantity(
-          id: "id12",
-          value: DateTime(0, 0, 0, 0, 1, 0).microsecondsSinceEpoch,
-          idTask: "repo"),
-      Quantity(id: "id13", value: 30, idTask: "pompe"),
-      Quantity(
-          id: "id14",
-          value: DateTime(0, 0, 0, 0, 1, 0).microsecondsSinceEpoch,
-          idTask: "repo"),
-      Quantity(id: "id15", value: 30, idTask: "pompe"),
-      Quantity(
-          id: "id16",
-          value: DateTime(0, 0, 0, 0, 1, 0).microsecondsSinceEpoch,
-          idTask: "repo"),
-    ]),
-    Activity(id: "id3", title: "Session", tasks: [
-      Quantity(
-          id: "id18",
-          value: DateTime(0, 0, 0, 0, 30, 0).microsecondsSinceEpoch,
-          idTask: "jouer"),
-      Quantity(
-          id: "id19",
-          value: DateTime(0, 0, 0, 0, 15, 0).microsecondsSinceEpoch,
-          idTask: "mange"),
-      Quantity(
-          id: "id20",
-          value: DateTime(0, 0, 0, 5, 0, 0).microsecondsSinceEpoch,
-          idTask: "dodo"),
-    ]),
-    Activity(id: "id4", title: "Etudier", tasks: [
-      Quantity(
-          id: "id22",
-          value: DateTime(0, 0, 0, 0, 30, 0).microsecondsSinceEpoch,
-          idTask: "etude"),
-      Quantity(
-          id: "id23",
-          value: DateTime(0, 0, 0, 0, 30, 0).microsecondsSinceEpoch,
-          idTask: "musique"),
-      Quantity(
-          id: "id25",
-          value: DateTime(0, 0, 0, 0, 30, 0).microsecondsSinceEpoch,
-          idTask: "etude"),
-      Quantity(
-          id: "id32",
-          value: DateTime(0, 0, 0, 0, 30, 0).microsecondsSinceEpoch,
-          idTask: "musique"),
-      Quantity(
-          id: "id36",
-          value: DateTime(0, 0, 0, 0, 30, 0).microsecondsSinceEpoch,
-          idTask: "etude"),
-    ]),
-  ];
+  final List<Activity> _activities = [];
   final taskNotifier = TaskNotifier.instance;
 
   static final instance = ActivityNotifier._();
@@ -95,6 +21,21 @@ class ActivityNotifier with ChangeNotifier {
         (element) => element.id == id,
         orElse: () => Activity(id: "-1", title: "", tasks: []),
       );
+
+  bool isTitleExist(String title) => _activities
+              .firstWhere((test) => test.title.trim() == title.trim(),
+                  orElse: () => Activity(id: "-1", title: "", tasks: []))
+              .id ==
+          "-1"
+      ? false
+      : true;
+
+  // ajouter une activiter
+  void addActivity({required String title, required List<Quantity> tasks}) {
+    _activities
+        .add(Activity(id: const Uuid().v1(), title: title, tasks: tasks));
+    notifyListeners();
+  }
 
   // verifi si l'activité existe avec l'id
   bool isExistById(String id) => getById(id).id != "-1" ? true : false;
@@ -129,7 +70,7 @@ class ActivityNotifier with ChangeNotifier {
           final task = taskNotifier.getById(quantity.idTask);
           if (task.withTimer) {
             resultat.add(
-                "${Tools.timeString(DateTime.fromMicrosecondsSinceEpoch(quantity.value), enLettre: true)} : ${task.title}");
+                "${Tools.timeString(MyTime.fromValue(quantity.value), enLettre: true)} : ${task.title}");
           } else {
             resultat.add(
                 quantity.value < 900000000000 && quantity.value > -900000000000

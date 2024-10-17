@@ -3,19 +3,14 @@ import 'package:uuid/uuid.dart';
 import 'package:wilpro/model/quantity.dart';
 
 class ManagerActivityNotifier with ChangeNotifier {
-  final List<Quantity> _editActivityList = [
-    Quantity(id: "1", value: 20, idTask: "pompe"),
-    Quantity(
-        id: "2",
-        value: DateTime(0, 0, 0, 12, 5, 15).microsecondsSinceEpoch,
-        idTask: "jouer"),
-  ];
+  final List<Quantity> _editActivityList = [];
   static final instance = ManagerActivityNotifier._();
   ManagerActivityNotifier._();
 
   /// ADD/EDITION
 
   List<Quantity> get editList => _editActivityList;
+  void clearEditList() => _editActivityList.clear();
 
   void deleteToeditActivityList(String id) {
     _editActivityList.removeWhere((element) => element.id == id);
