@@ -26,7 +26,6 @@ class _TaskSubSection extends State<TaskSubSection> {
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         bool isCheck = false;
         return AlertDialog(
@@ -38,6 +37,7 @@ class _TaskSubSection extends State<TaskSubSection> {
                   controller: newTaskController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
+                    counterText: "",
                   ),
                 ),
                 DropdownButton<bool>(

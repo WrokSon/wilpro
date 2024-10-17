@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/ui/composants/item/activity_item.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
+import 'package:wilpro/ui/page/manage_activity_page.dart';
 
 class ActivitySubSection extends StatefulWidget {
   const ActivitySubSection({super.key});
@@ -41,7 +43,10 @@ class _ActivitySubSection extends State<ActivitySubSection> {
             ),
             MyWidgets.button(
               text: "AJOUTER",
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, ManageActivityPage.nameReoute,
+                    arguments: Activity(id: "-1", title: "", tasks: []));
+              },
               inverseColor: false,
               width: double.infinity,
               height: 50,

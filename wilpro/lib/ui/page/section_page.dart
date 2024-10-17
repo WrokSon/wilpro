@@ -10,6 +10,8 @@ import 'package:wilpro/ui/page/sections/home_section.dart';
 class SectionPage extends StatefulWidget {
   const SectionPage({super.key});
 
+  static const nameReoute = "/";
+
   @override
   State<SectionPage> createState() => _SectionPage();
 }

@@ -40,8 +40,8 @@ class _ActivityItem extends State<ActivityItem> {
               itemCount: listTasks.length,
               itemBuilder: (BuildContext context, int index) =>
                   MyWidgets.simpleItemList(
-                      startText: listTasks[index].length > 18
-                          ? "${listTasks[index].substring(0, 18)}..."
+                      startText: listTasks[index].length > 20
+                          ? "${listTasks[index].substring(0, 20)}..."
                           : listTasks[index],
                       endText: "",
                       withPoint: true),

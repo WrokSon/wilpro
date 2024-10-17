@@ -41,7 +41,7 @@ class _CreationSection extends State<CreationSection> {
             color: MyColors.black,
           ),
         ),
-        textButton(text: "Tache", index: 1),
+        textButton(text: "Taches", index: 1),
       ],
     );
   }
