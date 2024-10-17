@@ -42,9 +42,7 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
         return AlertDialog(
           content: Form(
             key: keyForm,
-            child: textFieldNumber(
-              controller: quantityController,
-            ),
+            child: textFieldNumber(controller: quantityController, limit: 10),
           ),
           actions: [
             MyWidgets.button(

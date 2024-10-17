@@ -14,7 +14,7 @@ class MyMeteo extends StatefulWidget {
 
 class _MyMeteo extends State<MyMeteo> {
   final String _idIcon = "10d";
-  final double degres = -999;
+  double? degres;
   final String description = "...";
   // final _city = "orleans";
 
@@ -44,7 +44,9 @@ class _MyMeteo extends State<MyMeteo> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    MyWidgets.text(text: '${degres.toInt()}°C'),
+                    MyWidgets.text(
+                        text:
+                            degres == null ? "???°C" : '${degres!.toInt()}°C'),
                     MyWidgets.text(text: description),
                   ],
                 )

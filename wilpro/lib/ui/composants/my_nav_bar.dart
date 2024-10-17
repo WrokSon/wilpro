@@ -20,6 +20,7 @@ class _MyNavBar extends State<MyNavBar> {
   Widget navBarItem(
       {required IconData icon,
       required int index,
+      double size = 24,
       String? label,
       Color selected = MyColors.blue,
       Color unselected = MyColors.black}) {
@@ -34,11 +35,13 @@ class _MyNavBar extends State<MyNavBar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon,
+                  size: size,
                   color: _selectedIndex == index ? selected : unselected),
               label != null
                   ? Text(
                       label,
                       style: TextStyle(
+                          fontSize: size * 0.5,
                           color:
                               _selectedIndex == index ? selected : unselected),
                     )
@@ -62,9 +65,21 @@ class _MyNavBar extends State<MyNavBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          navBarItem(icon: Icons.edit, index: 0, label: "Création"),
-          navBarItem(icon: Icons.home, index: 1, label: "Acceuil"),
-          navBarItem(icon: Icons.bookmark, index: 2, label: "Historique"),
+          navBarItem(
+              icon: Icons.edit,
+              index: 0,
+              label: "Création",
+              size: screenHeight * 0.025),
+          navBarItem(
+              icon: Icons.home,
+              index: 1,
+              label: "Acceuil",
+              size: screenHeight * 0.025),
+          navBarItem(
+              icon: Icons.bookmark,
+              index: 2,
+              label: "Historique",
+              size: screenHeight * 0.025),
         ],
       ),
     );
