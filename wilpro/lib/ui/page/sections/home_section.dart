@@ -3,6 +3,7 @@ import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_map.dart';
 import 'package:wilpro/ui/composants/my_meteo.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
+import 'package:wilpro/ui/page/start_actyvity_page.dart';
 
 class HomeSection extends StatefulWidget {
   const HomeSection({super.key});
@@ -27,7 +28,13 @@ class _HomeSection extends State<HomeSection> {
             const MyMap(),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: MyWidgets.button(text: "DEMARRER", onTap: () {}),
+              child: MyWidgets.button(
+                  text: "DEMARRER",
+                  inverseColor: true,
+                  height: 60,
+                  onTap: () {
+                    Navigator.pushNamed(context, StartActyvityPage.nameReoute);
+                  }),
             ),
           ],
         ),

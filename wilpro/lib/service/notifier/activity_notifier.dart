@@ -8,7 +8,12 @@ import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/service/tools.dart';
 
 class ActivityNotifier with ChangeNotifier {
-  final List<Activity> _activities = [];
+  final List<Activity> _activities = [
+    Activity(id: "id", title: "mon title", tasks: [
+      Quantity(id: "id", value: 20, idTask: "pompe"),
+      Quantity(id: "2", value: MyTime(minute: 5).getValue(), idTask: "run")
+    ])
+  ];
   final taskNotifier = TaskNotifier.instance;
 
   static final instance = ActivityNotifier._();
@@ -53,10 +58,12 @@ class ActivityNotifier with ChangeNotifier {
 
   // recupere toutes les taches de l'activité via l'id
   List<Task> getListTaskById(String id) {
-    final List<Task> resultat = [];
+    List<Task> resultat = [];
     if (isExistById(id)) {
-      return taskNotifier.getByListId(
-          getById(id).tasks.map((element) => element.idTask).toList());
+      final listQuantity = getById(id).tasks;
+      resultat = taskNotifier.getByListId(
+          listQuantity.map((element) => element.idTask).toList());
+      // if(resultat.length != listQuantity.length) // revision
     }
     return resultat;
   }
@@ -65,7 +72,8 @@ class ActivityNotifier with ChangeNotifier {
   List<String> getListTaskStringById(String id) {
     final List<String> resultat = [];
     if (isExistById(id)) {
-      for (final quantity in getById(id).tasks) {
+      final activity = getById(id);
+      for (final quantity in activity.tasks) {
         if (taskNotifier.isExistById(quantity.idTask)) {
           final task = taskNotifier.getById(quantity.idTask);
           if (task.withTimer) {
@@ -77,6 +85,10 @@ class ActivityNotifier with ChangeNotifier {
                     ? "${quantity.value} : ${task.title}"
                     : "Impossible");
           }
+        } else {
+          // mettre a jour
+          // n'a pas trouvé la tache avec l'id
+          activity.tasks.removeWhere((test) => quantity.id == quantity.id);
         }
       }
     }

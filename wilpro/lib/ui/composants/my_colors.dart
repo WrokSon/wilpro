@@ -7,4 +7,6 @@ class MyColors {
   static const white = Colors.white;
   static const red = Color.fromARGB(220, 255, 7, 7);
   static const backgroundNavBar = Color.fromARGB(255, 224, 224, 224);
+  static const green = Color.fromARGB(255, 21, 235, 28);
+  static const orange = Color.fromARGB(255, 231, 176, 25);
 }

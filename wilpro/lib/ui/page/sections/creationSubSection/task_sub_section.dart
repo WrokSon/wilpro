@@ -42,7 +42,7 @@ class _TaskSubSection extends State<TaskSubSection> {
                 ),
                 const SizedBox(height: 5),
                 DropdownButtonFormField<bool>(
-                  value: true,
+                  value: isCheck,
                   items: [
                     DropdownMenuItem(
                       value: true,

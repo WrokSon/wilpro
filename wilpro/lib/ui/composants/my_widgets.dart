@@ -6,27 +6,33 @@ class MyWidgets {
   static Widget button({
     required String text,
     required void Function() onTap,
-    double height = 60,
+    double height = 50,
     double width = 200,
-    bool inverseColor = true,
+    Color color = MyColors.blue,
+    bool inverseColor = false,
+    bool isEnabled = true,
   }) {
     return SizedBox(
       height: height,
       width: width,
       child: ElevatedButton(
-        onPressed: onTap,
+        onPressed: isEnabled ? onTap : null,
         style: ButtonStyle(
-            shape: const WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  side: BorderSide(color: MyColors.blue)),
-            ),
-            backgroundColor: WidgetStatePropertyAll(
-                inverseColor ? MyColors.white : MyColors.blue)),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
+                side: BorderSide(
+                    color: isEnabled ? color : MyColors.backgroundNavBar)),
+          ),
+          backgroundColor: isEnabled
+              ? WidgetStatePropertyAll(inverseColor ? MyColors.white : color)
+              : const WidgetStatePropertyAll(MyColors.backgroundNavBar),
+        ),
         child: Text(
           text,
-          style: TextStyle(
-              color: inverseColor ? MyColors.blue : MyColors.background),
+          style: isEnabled
+              ? TextStyle(color: inverseColor ? color : MyColors.background)
+              : const TextStyle(color: MyColors.black),
         ),
       ),
     );
@@ -36,7 +42,7 @@ class MyWidgets {
   static Widget text(
       {required String text,
       double size = 17,
-      bool isBold = true,
+      bool isBold = false,
       Color color = Colors.black}) {
     return Text(
       text,
