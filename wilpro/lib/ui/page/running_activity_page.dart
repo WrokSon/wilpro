@@ -9,6 +9,7 @@ import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
+import 'package:wilpro/ui/page/section_page.dart';
 
 class RunningActivityPage extends StatefulWidget {
   final Activity item;
@@ -22,11 +23,12 @@ class RunningActivityPage extends StatefulWidget {
 class _RunningActivityPage extends State<RunningActivityPage> {
   final notifier = ActivityNotifier.instance;
   final List<StateTask> stateList = [];
+  List<Task> listTasks = [];
   int currentTask = 0;
   bool lockButtonDown = false;
   @override
   Widget build(BuildContext context) {
-    final List<Task> listTasks = notifier.getListTaskById(widget.item.id);
+    listTasks = notifier.getListTaskById(widget.item.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.item.title),
@@ -49,6 +51,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                 itemBuilder: (context, index) => itemListTask(listTasks[index]),
               ),
             ),
+            const SizedBox(height: 3),
             bottom(),
           ],
         ),
@@ -92,7 +95,12 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                     Expanded(
                       child: MyWidgets.button(
                         text: "PASSER",
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            currentTask = ++currentTask % listTasks.length;
+                            print("object");
+                          });
+                        },
                         color: MyColors.black,
                       ),
                     )
@@ -150,8 +158,8 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                     lockButtonDown = !lockButtonDown;
                   });
                 },
-                icon: const Icon(
-                  Icons.lock,
+                icon: Icon(
+                  lockButtonDown ? Icons.lock : Icons.lock_open,
                   color: MyColors.white,
                 ),
               ),
@@ -162,7 +170,9 @@ class _RunningActivityPage extends State<RunningActivityPage> {
             child: MyWidgets.button(
               isEnabled: lockButtonDown,
               text: "ARRETER",
-              onTap: () {},
+              onTap: () {
+                Navigator.popAndPushNamed(context, SectionPage.nameReoute);
+              },
               color: MyColors.red,
             ),
           ),
