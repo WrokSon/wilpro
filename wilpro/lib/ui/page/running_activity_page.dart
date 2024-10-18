@@ -97,9 +97,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                         text: "PASSER",
                         onTap: () {
                           setState(() {
-                            currentTask = ++currentTask % listTasks.length;
-                            print("object");
-                          });
+                            currentTask = ++currentTask % listTasks.length;                          });
                         },
                         color: MyColors.black,
                       ),
