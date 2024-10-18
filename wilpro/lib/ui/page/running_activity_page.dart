@@ -79,13 +79,15 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                 ),
                 Row(
                   children: [
-                    Expanded(
-                      child: MyWidgets.button(
-                        text: "FINI",
-                        onTap: () {},
-                        color: MyColors.black,
-                      ),
-                    ),
+                    task.withTimer
+                        ? const SizedBox()
+                        : Expanded(
+                            child: MyWidgets.button(
+                              text: "FINI",
+                              onTap: () {},
+                              color: MyColors.black,
+                            ),
+                          ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: MyWidgets.button(
