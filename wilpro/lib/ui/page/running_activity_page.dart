@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wilpro/model/activity.dart';
-import 'package:wilpro/model/enum/format_time_enum.dart';
 import 'package:wilpro/model/enum/state_task_enum.dart';
 import 'package:wilpro/model/state_task.dart';
 import 'package:wilpro/model/structure/my_time.dart';
+import 'package:wilpro/model/structure/my_timer.dart';
 import 'package:wilpro/model/task.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/tools.dart';
@@ -26,9 +27,34 @@ class _RunningActivityPage extends State<RunningActivityPage> {
   List<Task> listTasks = [];
   int currentTask = 0;
   bool lockButtonDown = false;
+  bool isPause = false;
+  bool isFinish = false;
+  late MyTimer globalTimer;
+  late MyTimer taskTimer;
+
+  _RunningActivityPage() {
+    globalTimer = MyTimer(
+      update: (value) {
+        if (listTasks[currentTask].withTimer && value.second < 0) {
+          stateList[currentTask].state = StateTaskEnum.success;
+          changeTask();
+        }
+        setState(() {});
+      },
+    );
+    taskTimer = MyTimer();
+  }
+
+  @override
+  void initState() {
+    listTasks = notifier.getListTaskById(widget.item.id);
+    globalTimer.startTimer();
+    taskTimer.startTimer();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    listTasks = notifier.getListTaskById(widget.item.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.item.title),
@@ -41,14 +67,15 @@ class _RunningActivityPage extends State<RunningActivityPage> {
         child: Column(
           children: [
             Expanded(
-                child:
-                    Center(child: MyWidgets.text(text: "00:12:05", size: 50))),
+                child: Center(
+                    child:
+                        MyWidgets.text(text: globalTimer.getText(), size: 50))),
             banier(listTasks[currentTask]),
             Expanded(
               flex: 2,
               child: ListView.builder(
                 itemCount: listTasks.length,
-                itemBuilder: (context, index) => itemListTask(listTasks[index]),
+                itemBuilder: (context, index) => itemListTask(index),
               ),
             ),
             const SizedBox(height: 3),
@@ -74,10 +101,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30, top: 5),
                   child: MyWidgets.text(
-                    text: Tools.timeString(
-                      MyTime.fromValue(23),
-                      format: FormatTimeEnum.hhmmss,
-                    ),
+                    text: taskTimer.getText(),
                   ),
                 ),
                 Row(
@@ -87,7 +111,11 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                         : Expanded(
                             child: MyWidgets.button(
                               text: "FINI",
-                              onTap: () {},
+                              onTap: () {
+                                stateList[currentTask].state =
+                                    StateTaskEnum.success;
+                                changeTask();
+                              },
                               color: MyColors.black,
                             ),
                           ),
@@ -97,7 +125,10 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                         text: "PASSER",
                         onTap: () {
                           setState(() {
-                            currentTask = ++currentTask % listTasks.length;                          });
+                            stateList[currentTask].state =
+                                StateTaskEnum.failed; // avant
+                            changeTask();
+                          });
                         },
                         color: MyColors.black,
                       ),
@@ -116,10 +147,41 @@ class _RunningActivityPage extends State<RunningActivityPage> {
     return "${task.withTimer ? Tools.timeString(MyTime.fromValue(quantity.value), enLettre: true) : quantity.value.toString()} : ${task.title}";
   }
 
-  Widget itemListTask(Task task) {
+  void changeTask() {
+    if (currentTask >= listTasks.length - 1) {
+      globalTimer.stopTimer(resets: false);
+      taskTimer.stopTimer(resets: false);
+      isFinish = true;
+      return;
+    }
+
+    currentTask++;
+    stateList[currentTask].state = StateTaskEnum.current;
+    print(stateList[currentTask].state);
+    final task = listTasks[currentTask];
+    taskTimer.setTimer(
+        limit: task.withTimer
+            ? MyTime.fromValue(widget.item.tasks[currentTask].value)
+            : null);
+  }
+
+  Widget itemListTask(int index) {
+    final task = listTasks[index];
     final stateTask = stateList.firstWhere(
-      (element) => element.idTask == task.id,
-      orElse: () => StateTask(idTask: task.id, state: StateTaskEnum.notyet),
+      (element) =>
+          element.idTask == task.id &&
+          element.idQuantiyActivity == widget.item.tasks[index].id,
+      orElse: () {
+        final add = StateTask(
+          idQuantiyActivity: const Uuid().v1(),
+          idTask: task.id,
+          state: stateList.length == currentTask
+              ? StateTaskEnum.current
+              : StateTaskEnum.notyet,
+        );
+        stateList.add(add);
+        return add;
+      },
     );
 
     return Container(
@@ -140,8 +202,19 @@ class _RunningActivityPage extends State<RunningActivityPage> {
             flex: 5,
             child: MyWidgets.button(
               isEnabled: lockButtonDown,
-              text: "PAUSE",
-              onTap: () {},
+              text: isPause ? "REPRENDRE" : "PAUSE",
+              onTap: () {
+                if (isPause) {
+                  globalTimer.startTimer(resets: false);
+                  taskTimer.startTimer(resets: false);
+                } else {
+                  globalTimer.stopTimer(resets: false);
+                  taskTimer.stopTimer(resets: false);
+                }
+                setState(() {
+                  isPause = !isPause;
+                });
+              },
             ),
           ),
           Expanded(
@@ -157,7 +230,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                   });
                 },
                 icon: Icon(
-                  lockButtonDown ? Icons.lock : Icons.lock_open,
+                  lockButtonDown ? Icons.lock_open : Icons.lock,
                   color: MyColors.white,
                 ),
               ),
@@ -170,6 +243,8 @@ class _RunningActivityPage extends State<RunningActivityPage> {
               text: "ARRETER",
               onTap: () {
                 Navigator.popAndPushNamed(context, SectionPage.nameReoute);
+                globalTimer.stopTimer();
+                taskTimer.stopTimer();
               },
               color: MyColors.red,
             ),
