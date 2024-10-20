@@ -43,4 +43,4 @@ app.*.map.json
 /android/app/release
 
 # cle api
-**/key_api.dart
+*/lib/model/enum/key_api.dart
