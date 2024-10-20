@@ -20,7 +20,7 @@ class _MyMeteo extends State<MyMeteo> {
   double? degres;
   String description = "...";
 
-  Future<void> _obtenirMeteo() async {
+  Future<void> _getMeteo() async {
     try {
       const city = "orleans";
       final apiUrl =
@@ -30,59 +30,66 @@ class _MyMeteo extends State<MyMeteo> {
 
       if (reponse.statusCode == 200) {
         Map<String, dynamic> meteoData = json.decode(reponse.body);
-        print(reponse.statusCode);
         setState(() {
           description = meteoData['weather'][0]['description'];
           _idIcon = meteoData["weather"][0]["icon"];
-          degres = double.parse(meteoData['main']['temp']);
+          degres = meteoData['main']['temp'];
         });
       }
     } catch (e) {
-      print("erreur");
+      degres = null;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _obtenirMeteo();
+    _getMeteo();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      color: MyColors.backgroundNavBar,
-      child: Container(
-        margin: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            MyWidgets.text(
-                text: Tools.timeString2(DateTime.now(),
-                    format: FormatTimeEnum.hhmmss),
-                size: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: MyImage.network(Tools.getURLImageMeteo(_idIcon)),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    MyWidgets.text(
-                        text:
-                            degres == null ? "???°C" : '${degres!.toInt()}°C'),
-                    MyWidgets.text(text: description),
-                  ],
-                )
-              ],
-            ),
-          ],
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _getMeteo();
+        });
+      },
+      child: Card(
+        elevation: 10,
+        color: MyColors.backgroundNavBar,
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              MyWidgets.text(
+                  text: Tools.timeString2(DateTime.now(),
+                      format: FormatTimeEnum.hhmmss),
+                  size: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: MyImage.network(Tools.getURLImageMeteo(_idIcon)),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      MyWidgets.text(
+                          text: degres == null
+                              ? "???°C"
+                              : '${degres!.toInt()}°C'),
+                      MyWidgets.text(text: description),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
