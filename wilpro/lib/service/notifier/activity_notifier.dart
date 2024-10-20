@@ -10,10 +10,10 @@ import 'package:wilpro/service/tools.dart';
 class ActivityNotifier with ChangeNotifier {
   final List<Activity> _activities = [
     Activity(id: "id", title: "mon title", tasks: [
+      Quantity(id: "20", value: MyTime(second: 5).getValue(), idTask: "run"),
+      Quantity(id: "id23", value: 20, idTask: "pompe"),
       Quantity(id: "2", value: MyTime(second: 5).getValue(), idTask: "run"),
-      Quantity(id: "id", value: 20, idTask: "pompe"),
-      Quantity(id: "2", value: MyTime(second: 5).getValue(), idTask: "run"),
-      Quantity(id: "id", value: 20, idTask: "pompe"),
+      Quantity(id: "id222", value: 20, idTask: "pompe"),
     ])
   ];
   final taskNotifier = TaskNotifier.instance;
@@ -44,19 +44,34 @@ class ActivityNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  // modifier une activiter
+  void editActivity(
+      {required String id,
+      required String title,
+      required List<Quantity> tasks}) {
+    final activity = getById(id);
+    activity.title = title;
+    activity.tasks = tasks;
+    notifyListeners();
+  }
+
+  void deleteActivityById(String id) {
+    _activities.removeWhere((test) => test.id == id);
+    notifyListeners();
+  }
+
   // verifi si l'activité existe avec l'id
   bool isExistById(String id) => getById(id).id != "-1" ? true : false;
 
   // verifi si l'activité existe avec l'le titre
-  bool isExistByTitle(String title) => _activities
-              .firstWhere(
-                (element) => element.title == title,
-                orElse: () => Activity(id: "-1", title: "", tasks: []),
-              )
-              .id ==
-          "-1"
-      ? true
-      : false;
+  bool isExistByTitle(String title, {String? original}) {
+    final activity = _activities.firstWhere(
+      (element) => element.title == title,
+      orElse: () => Activity(id: "-1", title: "", tasks: []),
+    );
+
+    return activity.id != "-1" && title != original ? true : false;
+  }
 
   // recupere toutes les taches de l'activité via l'id
   List<Task> getListTaskById(String id) {

@@ -25,6 +25,12 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
   final managerActivityNotifier = ManagerActivityNotifier.instance;
   // controller text
   final titleController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    managerActivityNotifier.editList = List.from(widget.item.tasks);
+    titleController.text = widget.item.title;
+  }
 
   @override
   void dispose() {
@@ -98,8 +104,25 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
     List<Quantity> tasks = managerActivityNotifier.editList;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isAddView ? "Ajouter" : "Modifier"),
+        title: Row(
+          children: [
+            Expanded(
+                child: Center(child: Text(isAddView ? "Ajouter" : "Modifier"))),
+            isAddView
+                ? const SizedBox()
+                : IconButton(
+                    onPressed: () {
+                      activityNotifier.deleteActivityById(widget.item.id);
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                      color: MyColors.red,
+                    ))
+          ],
+        ),
         centerTitle: true,
+        backgroundColor: MyColors.background,
       ),
       body: Container(
         color: MyColors.background,
@@ -148,12 +171,19 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
               onTap: () {
                 final title = titleController.text;
                 final listTasks = managerActivityNotifier.editList;
-                // NB : activityNotifier.isExistByTitle(title) -> true quand ça n'existe pas
+
                 if (title.isNotEmpty &&
-                    activityNotifier.isExistByTitle(title) &&
+                    !activityNotifier.isExistByTitle(title,
+                        original: widget.item.title) &&
                     listTasks.isNotEmpty) {
-                  activityNotifier.addActivity(
-                      title: title, tasks: List.from(listTasks));
+                  isAddView
+                      ? activityNotifier.addActivity(
+                          title: title, tasks: List.from(listTasks))
+                      : activityNotifier.editActivity(
+                          id: widget.item.id,
+                          title: title,
+                          tasks: List.from(listTasks),
+                        );
                   Navigator.pop(context);
                   managerActivityNotifier.clearEditList();
                 }

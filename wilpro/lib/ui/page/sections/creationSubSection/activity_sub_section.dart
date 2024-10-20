@@ -34,7 +34,10 @@ class _ActivitySubSection extends State<ActivitySubSection> {
                                   maxCrossAxisExtent: 200),
                           itemCount: activities.length,
                           itemBuilder: (BuildContext context, int index) =>
-                              ActivityItem(item: activities[index]))
+                              GestureDetector(
+                                  onTap: () => gotoedit(activities[index]),
+                                  child: ActivityItem(item: activities[index])),
+                        )
                       : Center(
                           child: MyWidgets.text(text: "Pas d'activité"),
                         ),
@@ -45,8 +48,7 @@ class _ActivitySubSection extends State<ActivitySubSection> {
             MyWidgets.button(
               text: "AJOUTER",
               onTap: () {
-                Navigator.pushNamed(context, ManagerActivityPage.nameReoute,
-                    arguments: Activity(id: "-1", title: "", tasks: []));
+                gotoedit(Activity(id: "-1", title: "", tasks: []));
               },
               inverseColor: false,
               width: double.infinity,
@@ -56,5 +58,10 @@ class _ActivitySubSection extends State<ActivitySubSection> {
         ),
       ),
     );
+  }
+
+  void gotoedit(Activity activity) {
+    Navigator.pushNamed(context, ManagerActivityPage.nameReoute,
+        arguments: activity);
   }
 }

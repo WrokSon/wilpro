@@ -3,13 +3,17 @@ import 'package:uuid/uuid.dart';
 import 'package:wilpro/model/quantity.dart';
 
 class ManagerActivityNotifier with ChangeNotifier {
-  final List<Quantity> _editActivityList = [];
+  List<Quantity> _editActivityList = [];
   static final instance = ManagerActivityNotifier._();
   ManagerActivityNotifier._();
 
   /// ADD/EDITION
 
   List<Quantity> get editList => _editActivityList;
+  set editList(List<Quantity> value) {
+    _editActivityList = value;
+  }
+
   void clearEditList() => _editActivityList.clear();
 
   void deleteToeditActivityList(String id) {
