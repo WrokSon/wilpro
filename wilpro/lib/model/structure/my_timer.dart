@@ -6,12 +6,16 @@ import 'package:wilpro/service/tools.dart';
 
 class MyTimer {
   MyTime countDownDuration = MyTime(minute: 10);
-  Duration duration = const Duration();
+  Duration duration;
   Timer? timer;
   Function(MyTime)? update;
   bool isCountdown;
   bool isLetter;
-  MyTimer({this.isCountdown = false, this.isLetter = false, this.update});
+  MyTimer(
+      {this.isCountdown = false,
+      this.isLetter = false,
+      this.update,
+      this.duration = const Duration()});
 
   void startTimer({bool resets = true}) {
     if (resets) {
@@ -20,13 +24,9 @@ class MyTimer {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  void replay() {
-    timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
-  }
-
   void setTimer({MyTime? limit}) {
     isCountdown = false;
-    if (limit != null){
+    if (limit != null) {
       isCountdown = true;
       countDownDuration = limit;
     }
