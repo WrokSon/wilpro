@@ -18,6 +18,9 @@ class SectionPage extends StatefulWidget {
 
 class _SectionPage extends State<SectionPage> {
   int indexSection = 1; // index de la page
+  final sectionCreation = const CreationSection();
+  final sectionHome = const HomeSection();
+  final sectionHistory = const HistorySection();
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +48,9 @@ class _SectionPage extends State<SectionPage> {
         ),
       ),
       frontLayer: [
-        const CreationSection(),
-        const HomeSection(),
-        const HistorySection(),
+        sectionCreation,
+        sectionHome,
+        sectionHistory,
       ][indexSection],
       bottomNavigationBar: MyNavBar(
         action: (value) {

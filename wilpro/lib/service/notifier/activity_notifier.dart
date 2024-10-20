@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wilpro/model/activity.dart';
+import 'package:wilpro/model/my_database.dart';
 import 'package:wilpro/model/quantity.dart';
 import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/model/task.dart';
@@ -8,18 +9,19 @@ import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/service/tools.dart';
 
 class ActivityNotifier with ChangeNotifier {
-  final List<Activity> _activities = [
-    Activity(id: "id", title: "mon title", tasks: [
-      Quantity(id: "20", value: MyTime(second: 5).getValue(), idTask: "run"),
-      Quantity(id: "id23", value: 20, idTask: "pompe"),
-      Quantity(id: "2", value: MyTime(second: 5).getValue(), idTask: "run"),
-      Quantity(id: "id222", value: 20, idTask: "pompe"),
-    ])
-  ];
+  List<Activity> _activities = [];
   final taskNotifier = TaskNotifier.instance;
+  final database = MyDatabase.instance;
 
   static final instance = ActivityNotifier._();
-  ActivityNotifier._();
+  ActivityNotifier._() {
+    init();
+  }
+
+  void init() async {
+    _activities = await database.getActivities();
+    notifyListeners();
+  }
 
   List<Activity> get activities => _activities;
 
@@ -39,25 +41,29 @@ class ActivityNotifier with ChangeNotifier {
 
   // ajouter une activiter
   void addActivity({required String title, required List<Quantity> tasks}) {
-    _activities.add(
-        Activity(id: const Uuid().v1(), title: title.trim(), tasks: tasks));
+    final activity =
+        Activity(id: const Uuid().v1(), title: title.trim(), tasks: tasks);
+    _activities.add(activity);
     notifyListeners();
+    database.insertActivity(activity);
   }
 
   // modifier une activiter
   void editActivity(
       {required String id,
       required String title,
-      required List<Quantity> tasks}) {
+      required List<Quantity> tasks}) async {
     final activity = getById(id);
     activity.title = title;
     activity.tasks = tasks;
     notifyListeners();
+    await database.updateActivity(activity);
   }
 
-  void deleteActivityById(String id) {
+  void deleteActivityById(String id) async {
     _activities.removeWhere((test) => test.id == id);
     notifyListeners();
+    await database.deleteActivity(id);
   }
 
   // verifi si l'activité existe avec l'id

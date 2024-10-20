@@ -1,17 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:wilpro/model/my_database.dart';
 import 'package:wilpro/model/task.dart';
 
 class TaskNotifier with ChangeNotifier {
   static final TaskNotifier instance = TaskNotifier._();
+  final database = MyDatabase.instance;
 
-  final List<Task> _tasks = [
-    Task(id: "run", title: "courrir", withTimer: true),
-    Task(id: "pompe", title: "pompe", withTimer: false)
-  ];
+  List<Task> _tasks = [];
 
   // constructeur privée
-  TaskNotifier._();
+  TaskNotifier._() {
+    init();
+  }
+
+  void init() async {
+    _tasks = await database.getTasks();
+    notifyListeners();
+  }
 
   // renvoie la liste entiere des tache existante
   List<Task> get taks => _tasks;
@@ -46,28 +52,32 @@ class TaskNotifier with ChangeNotifier {
   }
 
   // ajouter une tache
-  void addTask({required String title, required bool withTimer}) {
+  void addTask({required String title, required bool withTimer}) async {
     if (!isExistByTask(title, withTimer)) {
-      _tasks
-          .add(Task(id: const Uuid().v1(), title: title, withTimer: withTimer));
+      final task =
+          Task(id: const Uuid().v1(), title: title, withTimer: withTimer);
+      _tasks.add(task);
       notifyListeners();
+      await database.insertTask(task);
     }
   }
 
-  void editTask(Task task) {
+  void editTask(Task task) async {
     if (isExistById(task.id)) {
       final tache = _tasks.firstWhere((test) => test.id == task.id);
       tache.title = task.title;
       tache.withTimer = task.withTimer;
       notifyListeners();
+      await database.updateTask(task);
     }
   }
 
   // supprime l'element de la liste
-  void removeTaskById(String id) {
+  void removeTaskById(String id) async {
     if (isExistById(id)) {
       _tasks.removeWhere((element) => element.id == id);
       notifyListeners();
+      await database.deleteTask(id);
     }
   }
 }

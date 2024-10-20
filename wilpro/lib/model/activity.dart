@@ -7,6 +7,11 @@ class Activity {
 
   Activity({required this.id, required this.title, required this.tasks});
 
-  
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+    };
+  }
 
 }
