@@ -47,9 +47,10 @@ class _StartActyvityPage extends State<StartActyvityPage> {
                                   ativitySelected != index ? index : -1;
                             });
                           },
-                          child: Badge(
-                            backgroundColor: MyColors.blue,
-                            isLabelVisible: ativitySelected == index,
+                          child: Container(
+                            color: ativitySelected == index
+                                ? MyColors.green
+                                : null,
                             child: ActivityItem(item: activities[index]),
                           ),
                         ),
