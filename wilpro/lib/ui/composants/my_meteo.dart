@@ -20,23 +20,32 @@ class _MyMeteo extends State<MyMeteo> {
   double? degres;
   String description = "...";
 
-  Future<void> _obtenirMeteo(String city) async {
-    const city = "orleans";
-    final apiUrl =
-        'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=${KeyApi.meteo.value}&units=metric&lang=fr';
+  Future<void> _obtenirMeteo() async {
+    try {
+      const city = "orleans";
+      final apiUrl =
+          'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=${KeyApi.meteo.value}&units=metric&lang=fr';
 
-    final reponse = await http.get(Uri.parse(apiUrl));
+      final reponse = await http.get(Uri.parse(apiUrl));
 
-    if (reponse.statusCode == 200) {
-      Map<String, dynamic> meteoData = json.decode(reponse.body);
-      setState(() {
-        description = meteoData['weather'][0]['description'];
-        _idIcon = meteoData["weather"][0]["icon"];
-        degres = double.parse(meteoData['main']['temp']);
-      });
-    } else {
-      throw Exception('Echec lors de la récupération des données');
+      if (reponse.statusCode == 200) {
+        Map<String, dynamic> meteoData = json.decode(reponse.body);
+        print(reponse.statusCode);
+        setState(() {
+          description = meteoData['weather'][0]['description'];
+          _idIcon = meteoData["weather"][0]["icon"];
+          degres = double.parse(meteoData['main']['temp']);
+        });
+      }
+    } catch (e) {
+      print("erreur");
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _obtenirMeteo();
   }
 
   @override

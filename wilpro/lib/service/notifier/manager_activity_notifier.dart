@@ -12,6 +12,7 @@ class ManagerActivityNotifier with ChangeNotifier {
   List<Quantity> get editList => _editActivityList;
   set editList(List<Quantity> value) {
     _editActivityList = value;
+    notifyListeners();
   }
 
   void clearEditList() => _editActivityList.clear();
