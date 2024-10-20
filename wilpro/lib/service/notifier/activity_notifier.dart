@@ -10,8 +10,10 @@ import 'package:wilpro/service/tools.dart';
 class ActivityNotifier with ChangeNotifier {
   final List<Activity> _activities = [
     Activity(id: "id", title: "mon title", tasks: [
+      Quantity(id: "2", value: MyTime(second: 5).getValue(), idTask: "run"),
       Quantity(id: "id", value: 20, idTask: "pompe"),
-      Quantity(id: "2", value: MyTime(minute: 5).getValue(), idTask: "run")
+      Quantity(id: "2", value: MyTime(second: 5).getValue(), idTask: "run"),
+      Quantity(id: "id", value: 20, idTask: "pompe"),
     ])
   ];
   final taskNotifier = TaskNotifier.instance;
@@ -61,8 +63,8 @@ class ActivityNotifier with ChangeNotifier {
     List<Task> resultat = [];
     if (isExistById(id)) {
       final listQuantity = getById(id).tasks;
-      resultat = taskNotifier.getByListId(
-          listQuantity.map((element) => element.idTask).toList());
+      resultat = taskNotifier
+          .getByListId(listQuantity.map((element) => element.idTask).toList());
       // if(resultat.length != listQuantity.length) // revision
     }
     return resultat;

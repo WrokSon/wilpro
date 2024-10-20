@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/model/enum/state_task_enum.dart';
 import 'package:wilpro/model/state_task.dart';
@@ -35,19 +34,26 @@ class _RunningActivityPage extends State<RunningActivityPage> {
   _RunningActivityPage() {
     globalTimer = MyTimer(
       update: (value) {
-        if (listTasks[currentTask].withTimer && value.second < 0) {
-          stateList[currentTask].state = StateTaskEnum.success;
-          changeTask();
-        }
         setState(() {});
       },
     );
-    taskTimer = MyTimer();
+    taskTimer = MyTimer(
+      update: (value) {
+        if (listTasks[currentTask].withTimer && value.getValue() == 0) {
+          stateList.firstWhere((test) => test.index == currentTask).state =
+              StateTaskEnum.success;
+          changeTask();
+        }
+      },
+    );
   }
 
   @override
   void initState() {
     listTasks = notifier.getListTaskById(widget.item.id);
+    if (listTasks[0].withTimer) {
+      taskTimer.setTimer(limit: MyTime.fromValue(widget.item.tasks[0].value));
+    }
     globalTimer.startTimer();
     taskTimer.startTimer();
     super.initState();
@@ -79,7 +85,13 @@ class _RunningActivityPage extends State<RunningActivityPage> {
               ),
             ),
             const SizedBox(height: 3),
-            bottom(),
+            isFinish
+                ? MyWidgets.button(
+                    text: "Terminer",
+                    onTap: endActivity,
+                    width: double.infinity,
+                  )
+                : bottom(),
           ],
         ),
       ),
@@ -112,9 +124,14 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                             child: MyWidgets.button(
                               text: "FINI",
                               onTap: () {
-                                stateList[currentTask].state =
-                                    StateTaskEnum.success;
-                                changeTask();
+                                if (isFinish) return;
+                                setState(() {
+                                  stateList
+                                      .firstWhere(
+                                          (test) => test.index == currentTask)
+                                      .state = StateTaskEnum.success;
+                                  changeTask();
+                                });
                               },
                               color: MyColors.black,
                             ),
@@ -124,9 +141,11 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                       child: MyWidgets.button(
                         text: "PASSER",
                         onTap: () {
+                          if (isFinish) return;
                           setState(() {
-                            stateList[currentTask].state =
-                                StateTaskEnum.failed; // avant
+                            stateList
+                                .firstWhere((test) => test.index == currentTask)
+                                .state = StateTaskEnum.failed; // avant
                             changeTask();
                           });
                         },
@@ -156,8 +175,8 @@ class _RunningActivityPage extends State<RunningActivityPage> {
     }
 
     currentTask++;
-    stateList[currentTask].state = StateTaskEnum.current;
-    print(stateList[currentTask].state);
+    stateList.firstWhere((test) => test.index == currentTask).state =
+        StateTaskEnum.current;
     final task = listTasks[currentTask];
     taskTimer.setTimer(
         limit: task.withTimer
@@ -168,14 +187,12 @@ class _RunningActivityPage extends State<RunningActivityPage> {
   Widget itemListTask(int index) {
     final task = listTasks[index];
     final stateTask = stateList.firstWhere(
-      (element) =>
-          element.idTask == task.id &&
-          element.idQuantiyActivity == widget.item.tasks[index].id,
+      (element) => element.idTask == task.id && element.index == index,
       orElse: () {
         final add = StateTask(
-          idQuantiyActivity: const Uuid().v1(),
+          index: index,
           idTask: task.id,
-          state: stateList.length == currentTask
+          state: index == currentTask
               ? StateTaskEnum.current
               : StateTaskEnum.notyet,
         );
@@ -242,13 +259,17 @@ class _RunningActivityPage extends State<RunningActivityPage> {
               isEnabled: lockButtonDown,
               text: "ARRETER",
               onTap: () {
-                Navigator.popAndPushNamed(context, SectionPage.nameReoute);
-                globalTimer.stopTimer();
-                taskTimer.stopTimer();
+                endActivity();
               },
               color: MyColors.red,
             ),
           ),
         ],
       );
+
+  void endActivity() {
+    Navigator.popAndPushNamed(context, SectionPage.nameReoute);
+    globalTimer.stopTimer();
+    taskTimer.stopTimer();
+  }
 }
