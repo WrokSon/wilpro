@@ -1,5 +1,6 @@
 enum KeyApi {
-  meteo("0000");
+  // La clé API à demander sur OpenWeatherMap
+  meteo("0023");
 
   final String value;
   const KeyApi(this.value);

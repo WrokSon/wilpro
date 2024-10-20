@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/enum/format_time_enum.dart';
+import 'package:wilpro/model/enum/key_api.dart';
 import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_image.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyMeteo extends StatefulWidget {
   const MyMeteo({super.key});
@@ -13,10 +16,28 @@ class MyMeteo extends StatefulWidget {
 }
 
 class _MyMeteo extends State<MyMeteo> {
-  final String _idIcon = "10d";
+  String _idIcon = "10d";
   double? degres;
-  final String description = "...";
-  // final _city = "orleans";
+  String description = "...";
+
+  Future<void> _obtenirMeteo(String city) async {
+    const city = "orleans";
+    final apiUrl =
+        'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=${KeyApi.meteo.value}&units=metric&lang=fr';
+
+    final reponse = await http.get(Uri.parse(apiUrl));
+
+    if (reponse.statusCode == 200) {
+      Map<String, dynamic> meteoData = json.decode(reponse.body);
+      setState(() {
+        description = meteoData['weather'][0]['description'];
+        _idIcon = meteoData["weather"][0]["icon"];
+        degres = double.parse(meteoData['main']['temp']);
+      });
+    } else {
+      throw Exception('Echec lors de la récupération des données');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
