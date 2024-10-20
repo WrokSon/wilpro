@@ -1,10 +1,11 @@
 import 'package:wilpro/model/enum/format_time_enum.dart';
+import 'package:wilpro/model/structure/my_date.dart';
 import 'package:wilpro/model/structure/my_time.dart';
 
 class Tools {
   static String twoDigits(int n) => n.toString().padLeft(2, "0");
   // convertiseur de date
-  static String dateString(DateTime date) =>
+  static String dateString(MyDate date) =>
       "${twoDigits(date.day)}/${twoDigits(date.month)}/${twoDigits(date.year)}";
 
   // convertisseur de temps
@@ -66,7 +67,9 @@ class Tools {
     return int.parse(res.isNotEmpty ? res : "0");
   }
 
-  // convertisseur de temps
+  // convertisseur de date
+
+
   // convertisseur de temps
   static String timeString2(DateTime time,
       {bool enLettre = false, FormatTimeEnum format = FormatTimeEnum.auto}) {

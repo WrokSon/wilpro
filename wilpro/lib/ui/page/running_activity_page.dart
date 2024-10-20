@@ -6,6 +6,7 @@ import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/model/structure/my_timer.dart';
 import 'package:wilpro/model/task.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
+import 'package:wilpro/service/notifier/history_notifier.dart';
 import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
@@ -21,13 +22,15 @@ class RunningActivityPage extends StatefulWidget {
 }
 
 class _RunningActivityPage extends State<RunningActivityPage> {
-  final notifier = ActivityNotifier.instance;
+  final activityNotifier = ActivityNotifier.instance;
+  final historyNotifier = HistoryNotifier.instance;
   final List<StateTask> stateList = [];
   List<Task> listTasks = [];
   int currentTask = 0;
   bool lockButtonDown = false;
   bool isPause = false;
   bool isFinish = false;
+  late DateTime beginActivity;
   late MyTimer globalTimer;
   late MyTimer taskTimer;
 
@@ -50,12 +53,13 @@ class _RunningActivityPage extends State<RunningActivityPage> {
 
   @override
   void initState() {
-    listTasks = notifier.getListTaskById(widget.item.id);
+    listTasks = activityNotifier.getListTaskById(widget.item.id);
     if (listTasks[0].withTimer) {
       taskTimer.setTimer(limit: MyTime.fromValue(widget.item.tasks[0].value));
     }
     globalTimer.startTimer();
     taskTimer.startTimer();
+    beginActivity = DateTime.now();
     super.initState();
   }
 
@@ -269,6 +273,11 @@ class _RunningActivityPage extends State<RunningActivityPage> {
 
   void endActivity() {
     Navigator.popAndPushNamed(context, SectionPage.nameReoute);
+    historyNotifier.addHistory(
+      idActivity: widget.item.id,
+      duration: MyTime.fromValue(globalTimer.getValue()),
+      begin: beginActivity,
+    );
     globalTimer.stopTimer();
     taskTimer.stopTimer();
   }

@@ -65,6 +65,8 @@ class MyTimer {
     timer?.cancel();
   }
 
+  int getValue() => duration.inSeconds;
+
   String getText() {
     final time = MyTime(
         hour: duration.inHours,
