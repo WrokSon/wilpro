@@ -7,6 +7,7 @@ import 'package:wilpro/ui/composants/my_widgets.dart';
 import 'package:wilpro/ui/page/sections/creation_section.dart';
 import 'package:wilpro/ui/page/sections/history_section.dart';
 import 'package:wilpro/ui/page/sections/home_section.dart';
+import 'package:wilpro/ui/page/settings_page.dart';
 
 class SectionPage extends StatefulWidget {
   const SectionPage({super.key});
@@ -42,7 +43,9 @@ class _SectionPage extends State<SectionPage> {
         actions: [
           indexSection == 1
               ? IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, SettingsPage.nameReoute);
+                  },
                   icon: const Icon(
                     Icons.settings,
                     color: MyColors.black,

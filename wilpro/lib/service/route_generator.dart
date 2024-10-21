@@ -3,6 +3,7 @@ import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/ui/page/manager_activity_page.dart';
 import 'package:wilpro/ui/page/running_activity_page.dart';
 import 'package:wilpro/ui/page/section_page.dart';
+import 'package:wilpro/ui/page/settings_page.dart';
 import 'package:wilpro/ui/page/start_actyvity_page.dart';
 
 class RouteGenerator {
@@ -10,6 +11,8 @@ class RouteGenerator {
     switch (settings.name) {
       case SectionPage.nameReoute:
         return MaterialPageRoute(builder: (context) => const SectionPage());
+      case SettingsPage.nameReoute:
+        return MaterialPageRoute(builder: (context) => const SettingsPage());
       case StartActyvityPage.nameReoute:
         return MaterialPageRoute(
             builder: (context) => const StartActyvityPage());

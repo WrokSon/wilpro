@@ -88,4 +88,11 @@ class MyWidgets {
       ),
     );
   }
+
+  static Widget checkbox({required Function(bool) onChange, required bool value}) {
+    return Checkbox(
+      value: value,
+      onChanged: (value) => onChange(value!),
+    );
+  }
 }
