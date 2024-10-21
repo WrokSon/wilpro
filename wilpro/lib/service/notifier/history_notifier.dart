@@ -11,9 +11,7 @@ class HistoryNotifier with ChangeNotifier {
   final activityNotifier = ActivityNotifier.instance;
   final database = MyDatabase.instance;
   List<History> _historical = [];
-  HistoryNotifier._(){
-    init();
-  }
+  HistoryNotifier._();
 
   List<History> get getHistorical {
     final List<History> resultat = [];
@@ -25,9 +23,10 @@ class HistoryNotifier with ChangeNotifier {
     return resultat;
   }
 
-  void init() async {
+  Future<List<History>> init() async {
+    activityNotifier.activities = await activityNotifier.init();
     _historical = await database.getHistories();
-    notifyListeners();
+    return _historical;
   }
 
   void addHistory(

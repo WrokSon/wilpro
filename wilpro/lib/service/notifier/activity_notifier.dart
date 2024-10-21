@@ -14,16 +14,19 @@ class ActivityNotifier with ChangeNotifier {
   final database = MyDatabase.instance;
 
   static final instance = ActivityNotifier._();
-  ActivityNotifier._() {
-    init();
-  }
+  ActivityNotifier._();
 
-  void init() async {
-    _activities = await database.getActivities();
-    notifyListeners();
+  Future<List<Activity>> init() async {
+    taskNotifier.init();
+    return await database.getActivities();
   }
 
   List<Activity> get activities => _activities;
+
+  set activities(List<Activity> value) {
+    _activities = value;
+    notifyListeners();
+  }
 
   // renvoie l'activité
   Activity getById(String id) => _activities.firstWhere(

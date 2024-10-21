@@ -10,10 +10,7 @@ class TaskNotifier with ChangeNotifier {
   List<Task> _tasks = [];
 
   // constructeur privée
-  TaskNotifier._() {
-    init();
-  }
-
+  TaskNotifier._();
   void init() async {
     _tasks = await database.getTasks();
     notifyListeners();

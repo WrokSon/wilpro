@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:backdrop/backdrop.dart';
+import 'package:wilpro/service/notifier/history_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_nav_bar.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
@@ -21,6 +22,15 @@ class _SectionPage extends State<SectionPage> {
   final sectionCreation = const CreationSection();
   final sectionHome = const HomeSection();
   final sectionHistory = const HistorySection();
+  bool isReady = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      isReady ? null : _showMyLoadingDialog();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +69,40 @@ class _SectionPage extends State<SectionPage> {
           });
         },
       ),
+    );
+  }
+
+  // popup pour ajouter
+  Future<void> _showMyLoadingDialog() async {
+    final history = HistoryNotifier.instance;
+    return showDialog<void>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SizedBox(
+            height: 100,
+            width: 100,
+            child: FutureBuilder(
+                future: history.init(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    isReady = true;
+                    Navigator.of(context).pop();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 15),
+                      MyWidgets.text(text: "Chargement des données"),
+                    ],
+                  );
+                }),
+          ),
+        );
+      },
     );
   }
 }
