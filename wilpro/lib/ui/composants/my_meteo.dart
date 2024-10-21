@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/enum/format_time_enum.dart';
 import 'package:wilpro/model/enum/key_api.dart';
+import 'package:wilpro/model/structure/my_gps.dart';
 import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_image.dart';
@@ -19,12 +20,14 @@ class _MyMeteo extends State<MyMeteo> {
   String _idIcon = "10d";
   double? degres;
   String description = "...";
+  String? _city;
 
   Future<void> _getMeteo() async {
     try {
-      const city = "orleans";
+      final position = await MyGps.instance.getCurrentLocation();
       final apiUrl =
-          'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=${KeyApi.meteo.value}&units=metric&lang=fr';
+          "https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${KeyApi.meteo.value}&units=metric&lang=fr";
+      print(apiUrl);
 
       final reponse = await http.get(Uri.parse(apiUrl));
 
@@ -34,6 +37,7 @@ class _MyMeteo extends State<MyMeteo> {
           description = meteoData['weather'][0]['description'];
           _idIcon = meteoData["weather"][0]["icon"];
           degres = meteoData['main']['temp'];
+          _city = meteoData['name'];
         });
       }
     } catch (e) {
@@ -67,6 +71,7 @@ class _MyMeteo extends State<MyMeteo> {
                   text: Tools.timeString2(DateTime.now(),
                       format: FormatTimeEnum.hhmmss),
                   size: 30),
+              _city == null ? const SizedBox() : MyWidgets.text(text: _city!),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
