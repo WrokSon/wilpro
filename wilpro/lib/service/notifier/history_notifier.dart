@@ -15,7 +15,7 @@ class HistoryNotifier with ChangeNotifier {
 
   List<History> get getHistorical {
     final List<History> resultat = [];
-    for (History history in _historical) {
+    for (History history in _historical.toList()) {
       activityNotifier.isExistById(history.idActivity)
           ? resultat.add(history)
           : removeById(history.id);
