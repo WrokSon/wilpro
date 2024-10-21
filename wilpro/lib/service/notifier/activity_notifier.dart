@@ -121,4 +121,9 @@ class ActivityNotifier with ChangeNotifier {
 
     return resultat;
   }
+
+  void clearActivities(){
+    database.clearActivity();
+    notifyListeners();
+  }
 }

@@ -20,8 +20,7 @@ class _SettingsPage extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: MyWidgets.text(
-            text: "Paramettre", color: MyColors.black),
+        title: MyWidgets.text(text: "Paramettre", color: MyColors.black),
         centerTitle: true,
         backgroundColor: MyColors.background,
       ),
@@ -46,7 +45,9 @@ class _SettingsPage extends State<SettingsPage> {
                   MyWidgets.button(
                     text: "A propos de nous",
                     width: double.infinity,
-                    onTap: () {},
+                    onTap: () {
+                      _showMyAboutUsDialog();
+                    },
                   ),
                 ],
               );
@@ -186,7 +187,9 @@ class _SettingsPage extends State<SettingsPage> {
             color: MyColors.red,
             width: double.infinity,
             height: 30,
-            onTap: () {},
+            onTap: () {
+              notifier.restartApp();
+            },
           ),
         ],
       ),
@@ -226,6 +229,38 @@ class _SettingsPage extends State<SettingsPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showMyAboutUsDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            height: 300,
+            width: 500,
+            padding:
+                const EdgeInsets.only(top: 20, right: 15, left: 15, bottom: 3),
+            child: ListView(
+              children: [
+                Center(child: MyWidgets.text(text: "Wil-Pro", isBold: true)),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  child: MyWidgets.text(
+                      size: 13,
+                      text:
+                          "Je suis un étudiant en deuxième année de Master à Orleans. Je code des applications gratuites afin de répondre à un besoin ou des demandes. Je travaille tout seul donc s’il y a des améliorations que vous voulez voir sur cette application faite le moi savoir et je me pencherai sur cette amélioration durant mes temps libres."),
+                ),
+                MyWidgets.text(
+                    text: "Contact : deliremassam@gmail.com", size: 13),
+                const SizedBox(height: 10),
+                Center(child: MyWidgets.text(text: "Version 1.0", size: 13)),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

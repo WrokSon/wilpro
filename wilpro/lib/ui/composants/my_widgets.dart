@@ -33,7 +33,7 @@ class MyWidgets {
           text,
           style: isEnabled
               ? TextStyle(color: inverseColor ? color : MyColors.background)
-              :  TextStyle(color: MyColors.black),
+              : TextStyle(color: MyColors.black),
         ),
       ),
     );
@@ -47,6 +47,7 @@ class MyWidgets {
       Color color = Colors.black}) {
     return Text(
       text,
+      textAlign: TextAlign.justify,
       style: TextStyle(
         fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
         fontSize: size,
@@ -90,7 +91,8 @@ class MyWidgets {
     );
   }
 
-  static Widget checkbox({required Function(bool) onChange, required bool value}) {
+  static Widget checkbox(
+      {required Function(bool) onChange, required bool value}) {
     return Checkbox(
       value: value,
       onChanged: (value) => onChange(value!),

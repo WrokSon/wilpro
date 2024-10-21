@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:restart_app/restart_app.dart';
+import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/history_notifier.dart';
+import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 
 class SettingsNotifier with ChangeNotifier {
   static final instance = SettingsNotifier._();
   final _historyNotifier = HistoryNotifier.instance;
+  final _activityNotifier = ActivityNotifier.instance;
+  final _taskNotifier = TaskNotifier.instance;
   bool _autoSaveHistory = true;
   bool _playSound = true;
   bool _darkMode = false;
@@ -43,5 +48,15 @@ class SettingsNotifier with ChangeNotifier {
 
   void clearHistory() {
     _historyNotifier.clearHistory();
+  }
+
+  void restartApp() {
+    _historyNotifier.clearHistory();
+    _activityNotifier.clearActivities();
+    _taskNotifier.clearTasks();
+    Restart.restartApp(
+      notificationTitle: 'Restarting App',
+      notificationBody: 'Please tap here to open the app again.',
+    );
   }
 }

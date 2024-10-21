@@ -106,6 +106,13 @@ class MyDatabase {
     );
   }
 
+  // D - Supprimer
+  Future<void> clearActivity() async {
+    final db = await database;
+    await db!.execute("DELETE FROM $_nameTableActivity");
+    await clearQuantity();
+  }
+
   // CRUD pour Quantity
 
   // C - Créer
@@ -164,6 +171,12 @@ class MyDatabase {
     );
   }
 
+  // D - Supprimer
+  Future<void> clearQuantity() async {
+    final db = await database;
+    await db!.execute("DELETE FROM $_nameTableQuantity");
+  }
+
   // CRUD pour Task
 
   // C - Créer
@@ -202,6 +215,12 @@ class MyDatabase {
       where: "id = ?",
       whereArgs: [id],
     );
+  }
+
+  // D - Supprimer
+  Future<void> clearTasks() async {
+    final db = await database;
+    await db!.execute("DELETE FROM $_nameTableTask");
   }
 
   // CRUD pour History

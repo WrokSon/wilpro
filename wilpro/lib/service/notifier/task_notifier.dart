@@ -77,4 +77,9 @@ class TaskNotifier with ChangeNotifier {
       await database.deleteTask(id);
     }
   }
+
+  void clearTasks(){
+    database.clearTasks();
+    notifyListeners();
+  }
 }
