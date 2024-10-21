@@ -27,7 +27,6 @@ class _MyMeteo extends State<MyMeteo> {
       final position = await MyGps.instance.getCurrentLocation();
       final apiUrl =
           "https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${KeyApi.meteo.value}&units=metric&lang=fr";
-      print(apiUrl);
 
       final reponse = await http.get(Uri.parse(apiUrl));
 

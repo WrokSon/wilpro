@@ -28,7 +28,11 @@ class _HistoryItem extends State<HistoryItem> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MyWidgets.text(text: widget.item.title, isBold: true),
+                  MyWidgets.text(
+                      text: widget.item.title.length < 25
+                          ? widget.item.title
+                          : "${widget.item.title.substring(0, 25)}...",
+                      isBold: true),
                   MyWidgets.text(
                     text: Tools.dateString(widget.item.date),
                     size: 13,

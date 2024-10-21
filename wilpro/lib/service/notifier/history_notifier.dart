@@ -33,7 +33,7 @@ class HistoryNotifier with ChangeNotifier {
       {required String idActivity,
       required MyTime duration,
       required DateTime begin}) async {
-    final title = "Activité de ${activityNotifier.getById(idActivity).title}";
+    final title = activityNotifier.getById(idActivity).title;
     final history = History(
       id: const Uuid().v1(),
       title: title,
