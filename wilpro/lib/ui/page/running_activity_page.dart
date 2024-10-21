@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/model/enum/state_task_enum.dart';
 import 'package:wilpro/model/state_task.dart';
+import 'package:wilpro/model/structure/music_player.dart';
 import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/model/structure/my_timer.dart';
 import 'package:wilpro/model/task.dart';
@@ -33,10 +34,16 @@ class _RunningActivityPage extends State<RunningActivityPage> {
   late DateTime beginActivity;
   late MyTimer globalTimer;
   late MyTimer taskTimer;
+  // final notif = MyNotification();
 
   _RunningActivityPage() {
     globalTimer = MyTimer(
       update: (value) {
+        // notif.showNotification(
+        //   id: widget.item.id,
+        //   title: widget.item.title,
+        //   body: globalTimer.getText(),
+        // );
         setState(() {});
       },
     );
@@ -61,6 +68,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
     taskTimer.startTimer();
     beginActivity = DateTime.now();
     super.initState();
+    // notif.initialize();
   }
 
   @override
@@ -177,7 +185,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
       isFinish = true;
       return;
     }
-
+    MusicPlayer.instance.playSound();
     currentTask++;
     stateList.firstWhere((test) => test.index == currentTask).state =
         StateTaskEnum.current;
