@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MyColors {
-  static const background = Color.fromARGB(255, 248, 248, 248);
-  static const blue = Color.fromARGB(255, 22, 0, 148);
-  static const black = Colors.black;
-  static const white = Colors.white;
-  static const red = Color.fromARGB(220, 255, 7, 7);
-  static const backgroundNavBar = Color.fromARGB(255, 224, 224, 224);
-  static const green = Color.fromARGB(255, 21, 235, 28);
-  static const orange = Color.fromARGB(255, 231, 176, 25);
+  static Color background = const Color.fromARGB(255, 248, 248, 248);
+  static Color blue = const Color.fromARGB(255, 22, 0, 148);
+  static Color black = Colors.black;
+  static Color white = Colors.white;
+  static Color red = const Color.fromARGB(220, 255, 7, 7);
+  static Color backgroundNavBar = const Color.fromARGB(255, 224, 224, 224);
+  static Color green = const Color.fromARGB(255, 21, 235, 28);
+  static Color orange = const Color.fromARGB(255, 231, 176, 25);
 }

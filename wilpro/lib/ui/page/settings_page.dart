@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/enum/langage_enum.dart';
+import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
 
@@ -13,40 +14,43 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPage extends State<SettingsPage> {
-  bool darkMode = false;
-  bool autoSaveHistory = true;
-  bool playmusic = true;
   LangageEnum langage = LangageEnum.french;
+  final notifier = SettingsNotifier.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Paramettre"),
+        title: MyWidgets.text(
+            text: "Paramettre", color: MyColors.black),
         centerTitle: true,
         backgroundColor: MyColors.background,
       ),
       backgroundColor: MyColors.background,
       body: Container(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
+        child: ListenableBuilder(
+            listenable: notifier,
+            builder: (context, child) {
+              return Column(
                 children: [
-                  themeSection(),
-                  historySection(),
-                  musicSection(),
-                  otherSection(),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        themeSection(),
+                        historySection(),
+                        musicSection(),
+                        otherSection(),
+                      ],
+                    ),
+                  ),
+                  MyWidgets.button(
+                    text: "A propos de nous",
+                    width: double.infinity,
+                    onTap: () {},
+                  ),
                 ],
-              ),
-            ),
-            MyWidgets.button(
-              text: "A propos de nous",
-              width: double.infinity,
-              onTap: () {},
-            ),
-          ],
-        ),
+              );
+            }),
       ),
     );
   }
@@ -74,10 +78,10 @@ class _SettingsPage extends State<SettingsPage> {
                   child: MyWidgets.checkbox(
                       onChange: (value) {
                         setState(() {
-                          darkMode = !darkMode;
+                          notifier.darkMode = !notifier.darkMode;
                         });
                       },
-                      value: darkMode),
+                      value: notifier.darkMode),
                 ),
               ),
             ],
@@ -111,10 +115,10 @@ class _SettingsPage extends State<SettingsPage> {
                   child: MyWidgets.checkbox(
                       onChange: (value) {
                         setState(() {
-                          autoSaveHistory = !autoSaveHistory;
+                          notifier.autoSaveHistory = !notifier.autoSaveHistory;
                         });
                       },
-                      value: autoSaveHistory),
+                      value: notifier.autoSaveHistory),
                 ),
               ),
             ],
@@ -125,7 +129,9 @@ class _SettingsPage extends State<SettingsPage> {
             color: MyColors.red,
             width: double.infinity,
             height: 30,
-            onTap: () {},
+            onTap: () {
+              notifier.clearHistory();
+            },
           ),
         ],
       ),
@@ -210,10 +216,10 @@ class _SettingsPage extends State<SettingsPage> {
                   child: MyWidgets.checkbox(
                       onChange: (value) {
                         setState(() {
-                          playmusic = !playmusic;
+                          notifier.playSound = !notifier.playSound;
                         });
                       },
-                      value: playmusic),
+                      value: notifier.playSound),
                 ),
               ),
             ],

@@ -8,6 +8,7 @@ import 'package:wilpro/model/structure/my_timer.dart';
 import 'package:wilpro/model/task.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/history_notifier.dart';
+import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
@@ -25,6 +26,7 @@ class RunningActivityPage extends StatefulWidget {
 class _RunningActivityPage extends State<RunningActivityPage> {
   final activityNotifier = ActivityNotifier.instance;
   final historyNotifier = HistoryNotifier.instance;
+  final settingsNotifier = SettingsNotifier.instance;
   final List<StateTask> stateList = [];
   List<Task> listTasks = [];
   int currentTask = 0;
@@ -75,7 +77,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.item.title),
+        title: MyWidgets.text(text: widget.item.title, color: MyColors.black),
         backgroundColor: MyColors.background,
         centerTitle: true,
       ),
@@ -86,8 +88,10 @@ class _RunningActivityPage extends State<RunningActivityPage> {
           children: [
             Expanded(
                 child: Center(
-                    child:
-                        MyWidgets.text(text: globalTimer.getText(), size: 50))),
+                    child: MyWidgets.text(
+                        text: globalTimer.getText(),
+                        size: 50,
+                        color: MyColors.black))),
             banier(listTasks[currentTask]),
             Expanded(
               flex: 2,
@@ -185,7 +189,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
       isFinish = true;
       return;
     }
-    MusicPlayer.instance.playSound();
+    settingsNotifier.playSound ? MusicPlayer.instance.playSound() : null;
     currentTask++;
     stateList.firstWhere((test) => test.index == currentTask).state =
         StateTaskEnum.current;
@@ -260,7 +264,8 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                 },
                 icon: Icon(
                   lockButtonDown ? Icons.lock_open : Icons.lock,
-                  color: MyColors.white,
+                  color:
+                      settingsNotifier.darkMode ? Colors.black : MyColors.white,
                 ),
               ),
             ),
@@ -281,11 +286,13 @@ class _RunningActivityPage extends State<RunningActivityPage> {
 
   void endActivity() {
     Navigator.popAndPushNamed(context, SectionPage.nameReoute);
-    historyNotifier.addHistory(
-      idActivity: widget.item.id,
-      duration: MyTime.fromValue(globalTimer.getValue()),
-      begin: beginActivity,
-    );
+    settingsNotifier.autoSaveHistory
+        ? historyNotifier.addHistory(
+            idActivity: widget.item.id,
+            duration: MyTime.fromValue(globalTimer.getValue()),
+            begin: beginActivity,
+          )
+        : null;
     globalTimer.stopTimer();
     taskTimer.stopTimer();
   }

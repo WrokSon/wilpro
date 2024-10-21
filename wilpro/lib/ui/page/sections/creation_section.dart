@@ -65,7 +65,7 @@ class _CreationSection extends State<CreationSection> {
           },
           child: Text(
             text,
-            style: const TextStyle(color: MyColors.black),
+            style: TextStyle(color: MyColors.black),
           ),
         ),
       ),

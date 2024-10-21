@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wilpro/ui/composants/my_colors.dart';
 
 enum StateTaskEnum {
-  current(MyColors.orange),
-  failed(MyColors.red),
-  success(MyColors.green),
-  notyet(MyColors.backgroundNavBar);
+  current(Color.fromARGB(255, 231, 176, 25)),
+  failed(Color.fromARGB(220, 255, 7, 7)),
+  success(Color.fromARGB(255, 21, 235, 28)),
+  notyet(Color.fromARGB(255, 224, 224, 224));
+
   final Color color;
   const StateTaskEnum(this.color);
 }

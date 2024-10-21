@@ -8,10 +8,11 @@ class MyWidgets {
     required void Function() onTap,
     double height = 50,
     double width = 200,
-    Color color = MyColors.blue,
+    Color? color,
     bool inverseColor = false,
     bool isEnabled = true,
   }) {
+    color = color ?? MyColors.blue;
     return SizedBox(
       height: height,
       width: width,
@@ -26,13 +27,13 @@ class MyWidgets {
           ),
           backgroundColor: isEnabled
               ? WidgetStatePropertyAll(inverseColor ? MyColors.white : color)
-              : const WidgetStatePropertyAll(MyColors.backgroundNavBar),
+              : WidgetStatePropertyAll(MyColors.backgroundNavBar),
         ),
         child: Text(
           text,
           style: isEnabled
               ? TextStyle(color: inverseColor ? color : MyColors.background)
-              : const TextStyle(color: MyColors.black),
+              :  TextStyle(color: MyColors.black),
         ),
       ),
     );

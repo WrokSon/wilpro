@@ -25,14 +25,16 @@ class _HistorySection extends State<HistorySection> {
         builder: (context, child) => Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            MyWidgets.text(text: "Historique"),
+            MyWidgets.text(text: "Historique", color: MyColors.black),
             Expanded(
               child: listHistory.isNotEmpty
                   ? ListView.builder(
                       itemCount: listHistory.length,
                       itemBuilder: (context, index) =>
                           HistoryItem(item: listHistory[index]))
-                  : Center(child: MyWidgets.text(text: "Pas d'historique")),
+                  : Center(
+                      child: MyWidgets.text(
+                          text: "Pas d'historique", color: MyColors.black)),
             )
           ],
         ),

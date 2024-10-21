@@ -232,4 +232,10 @@ class MyDatabase {
       whereArgs: [id],
     );
   }
+
+  // D - Supprimer
+  Future<void> clearHistory() async {
+    final db = await database;
+    await db!.execute("DELETE FROM $_nameTableHistory");
+  }
 }

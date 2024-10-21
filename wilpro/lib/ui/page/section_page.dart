@@ -48,7 +48,7 @@ class _SectionPage extends State<SectionPage> {
                   },
                   icon: const Icon(
                     Icons.settings,
-                    color: MyColors.black,
+                    color: Colors.white,
                   ))
               : const SizedBox()
         ],

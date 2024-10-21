@@ -163,7 +163,7 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
               managerActivityNotifier.deleteToeditActivityList(widget.item.id);
             });
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.delete,
             color: MyColors.red,
           ),

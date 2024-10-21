@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
+import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
 
@@ -16,6 +17,7 @@ class _ActivityItem extends State<ActivityItem> {
   @override
   Widget build(BuildContext context) {
     final notifier = ActivityNotifier.instance;
+    final settingsNotifier = SettingsNotifier.instance;
     final listTasks = notifier.getListTaskStringById(widget.item.id);
 
     return Container(
@@ -33,7 +35,9 @@ class _ActivityItem extends State<ActivityItem> {
                   text: widget.item.title.length > 12
                       ? "${widget.item.title.substring(0, 12)}..."
                       : widget.item.title,
-                  color: MyColors.white)),
+                  color: settingsNotifier.darkMode
+                      ? Colors.black
+                      : MyColors.white)),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(5),

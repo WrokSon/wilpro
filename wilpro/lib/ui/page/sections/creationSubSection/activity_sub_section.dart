@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/ui/composants/item/activity_item.dart';
+import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
 import 'package:wilpro/ui/page/manager_activity_page.dart';
 
@@ -39,7 +40,8 @@ class _ActivitySubSection extends State<ActivitySubSection> {
                                   child: ActivityItem(item: activities[index])),
                         )
                       : Center(
-                          child: MyWidgets.text(text: "Pas d'activité"),
+                          child: MyWidgets.text(
+                              text: "Pas d'activité", color: MyColors.black),
                         ),
                 );
               },

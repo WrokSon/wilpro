@@ -52,4 +52,10 @@ class HistoryNotifier with ChangeNotifier {
     await database.deleteHistory(id);
     notifyListeners();
   }
+
+  void clearHistory() {
+    _historical = [];
+    database.clearHistory();
+    notifyListeners();
+  }
 }

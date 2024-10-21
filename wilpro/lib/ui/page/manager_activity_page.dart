@@ -4,6 +4,7 @@ import 'package:wilpro/model/quantity.dart';
 import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/manager_activity_notifier.dart';
+import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/ui/composants/item/task_in_activity_item.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
@@ -23,6 +24,7 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
   final taskNotifier = TaskNotifier.instance;
   final activityNotifier = ActivityNotifier.instance;
   final managerActivityNotifier = ManagerActivityNotifier.instance;
+  final settingsNotifier = SettingsNotifier.instance;
   // controller text
   final titleController = TextEditingController();
   @override
@@ -107,7 +109,10 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
         title: Row(
           children: [
             Expanded(
-                child: Center(child: Text(isAddView ? "Ajouter" : "Modifier"))),
+                child: Center(
+                    child: MyWidgets.text(
+                        text: isAddView ? "Ajouter" : "Modifier",
+                        color: MyColors.black))),
             isAddView
                 ? const SizedBox()
                 : IconButton(
@@ -115,7 +120,7 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
                       activityNotifier.deleteActivityById(widget.item.id);
                       Navigator.pop(context);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.delete,
                       color: MyColors.red,
                     ))
@@ -124,77 +129,84 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
         centerTitle: true,
         backgroundColor: MyColors.background,
       ),
-      body: Container(
-        color: MyColors.background,
-        padding: const EdgeInsets.all(10),
-        child: ListenableBuilder(
-          builder: (context, child) =>
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            MyWidgets.text(text: "Titre"),
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: TextFormField(
-                controller: titleController,
-                maxLength: 100,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  counterText: "",
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                MyWidgets.text(text: "Liste des taches"),
-                IconButton(
-                  onPressed: () {
-                    _showMyAddDialog();
-                  },
-                  icon: const Icon(Icons.add, color: MyColors.blue),
-                )
-              ],
-            ),
-            Expanded(
-              child: tasks.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: tasks.length,
-                      itemBuilder: (context, index) =>
-                          TaskInActivityItem(item: tasks[index]),
-                    )
-                  : Center(
-                      child: MyWidgets.text(
-                          text: "Votre Activité n'a pas de taches"),
-                    ),
-            ),
-            MyWidgets.button(
-              text: "VALIDER",
-              onTap: () {
-                final title = titleController.text;
-                final listTasks = managerActivityNotifier.editList;
+      body: ListenableBuilder(
+          listenable: settingsNotifier,
+          builder: (context, child) {
+            return Container(
+              color: MyColors.background,
+              padding: const EdgeInsets.all(10),
+              child: ListenableBuilder(
+                builder: (context, child) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyWidgets.text(text: "Titre", color: MyColors.black),
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: TextFormField(
+                          controller: titleController,
+                          maxLength: 100,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            counterText: "",
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MyWidgets.text(
+                              text: "Liste des taches", color: MyColors.black),
+                          IconButton(
+                            onPressed: () {
+                              _showMyAddDialog();
+                            },
+                            icon: Icon(Icons.add, color: MyColors.blue),
+                          )
+                        ],
+                      ),
+                      Expanded(
+                        child: tasks.isNotEmpty
+                            ? ListView.builder(
+                                itemCount: tasks.length,
+                                itemBuilder: (context, index) =>
+                                    TaskInActivityItem(item: tasks[index]),
+                              )
+                            : Center(
+                                child: MyWidgets.text(
+                                    text: "Votre Activité n'a pas de taches",
+                                    color: MyColors.black),
+                              ),
+                      ),
+                      MyWidgets.button(
+                        text: "VALIDER",
+                        onTap: () {
+                          final title = titleController.text;
+                          final listTasks = managerActivityNotifier.editList;
 
-                if (title.isNotEmpty &&
-                    !activityNotifier.isExistByTitle(title,
-                        original: widget.item.title) &&
-                    listTasks.isNotEmpty) {
-                  isAddView
-                      ? activityNotifier.addActivity(
-                          title: title, tasks: List.from(listTasks))
-                      : activityNotifier.editActivity(
-                          id: widget.item.id,
-                          title: title,
-                          tasks: List.from(listTasks),
-                        );
-                  Navigator.pop(context);
-                  managerActivityNotifier.clearEditList();
-                }
-              },
-              inverseColor: false,
-              width: double.infinity,
-            )
-          ]),
-          listenable: managerActivityNotifier,
-        ),
-      ),
+                          if (title.isNotEmpty &&
+                              !activityNotifier.isExistByTitle(title,
+                                  original: widget.item.title) &&
+                              listTasks.isNotEmpty) {
+                            isAddView
+                                ? activityNotifier.addActivity(
+                                    title: title, tasks: List.from(listTasks))
+                                : activityNotifier.editActivity(
+                                    id: widget.item.id,
+                                    title: title,
+                                    tasks: List.from(listTasks),
+                                  );
+                            Navigator.pop(context);
+                            managerActivityNotifier.clearEditList();
+                          }
+                        },
+                        inverseColor: false,
+                        width: double.infinity,
+                      )
+                    ]),
+                listenable: managerActivityNotifier,
+              ),
+            );
+          }),
     );
   }
 }

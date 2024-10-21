@@ -56,8 +56,8 @@ class _TaskSubSection extends State<TaskSubSection> {
                   onChanged: (value) {
                     isCheck = value!;
                   },
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: MyColors
@@ -117,7 +117,8 @@ class _TaskSubSection extends State<TaskSubSection> {
                         ),
                       )
                     : Center(
-                        child: MyWidgets.text(text: "Pas de tache"),
+                        child: MyWidgets.text(
+                            text: "Pas de tache", color: MyColors.black),
                       ),
               ),
               MyWidgets.button(

@@ -22,8 +22,10 @@ class _MyNavBar extends State<MyNavBar> {
       required int index,
       double size = 24,
       String? label,
-      Color selected = MyColors.blue,
-      Color unselected = MyColors.black}) {
+      Color? selected,
+      Color? unselected}) {
+    selected = selected ?? MyColors.blue;
+    unselected = unselected ?? Colors.black;
     return Expanded(
       child: GestureDetector(
         onTap: () {
