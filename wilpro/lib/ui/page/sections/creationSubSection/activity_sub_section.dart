@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/ui/composants/item/activity_item.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
@@ -18,7 +19,7 @@ class _ActivitySubSection extends State<ActivitySubSection> {
   Widget build(BuildContext context) {
     final notifier = ActivityNotifier.instance;
     final activities = notifier.activities;
-
+    final lang = Langue.instance;
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -41,14 +42,14 @@ class _ActivitySubSection extends State<ActivitySubSection> {
                         )
                       : Center(
                           child: MyWidgets.text(
-                              text: "Pas d'activité", color: MyColors.black),
+                              text: lang.empty(), color: MyColors.black),
                         ),
                 );
               },
               listenable: notifier,
             ),
             MyWidgets.button(
-              text: "AJOUTER",
+              text: lang.add(),
               onTap: () {
                 gotoedit(Activity(id: "-1", title: "", tasks: []));
               },

@@ -32,7 +32,7 @@ class MyWidgets {
         child: Text(
           text,
           style: isEnabled
-              ? TextStyle(color: inverseColor ? color : MyColors.background)
+              ? TextStyle(color: inverseColor ? color : Colors.white)
               : TextStyle(color: MyColors.black),
         ),
       ),

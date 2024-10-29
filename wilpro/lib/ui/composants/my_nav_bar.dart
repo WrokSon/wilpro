@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 
 class MyNavBar extends StatefulWidget {
@@ -60,6 +61,7 @@ class _MyNavBar extends State<MyNavBar> {
     final screenHeight = MediaQuery.of(context).size.height;
     double deviceWidth(BuildContext context) =>
         MediaQuery.of(context).size.width;
+    final lang = Langue.instance;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth(context) * 0.1),
       height: screenHeight * 0.08,
@@ -70,17 +72,17 @@ class _MyNavBar extends State<MyNavBar> {
           navBarItem(
               icon: Icons.edit,
               index: 0,
-              label: "Création",
+              label: lang.creation(),
               size: screenHeight * 0.025),
           navBarItem(
               icon: Icons.home,
               index: 1,
-              label: "Acceuil",
+              label: lang.home(),
               size: screenHeight * 0.025),
           navBarItem(
               icon: Icons.bookmark,
               index: 2,
-              label: "Historique",
+              label: lang.history(),
               size: screenHeight * 0.025),
         ],
       ),

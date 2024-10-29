@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_map.dart';
@@ -34,7 +35,7 @@ class _HomeSection extends State<HomeSection> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: MyWidgets.button(
-                        text: "DEMARRER",
+                        text: Langue.instance.start(),
                         inverseColor: true,
                         height: 60,
                         onTap: () {

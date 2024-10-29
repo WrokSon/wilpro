@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wilpro/model/activity.dart';
 import 'package:wilpro/model/quantity.dart';
 import 'package:wilpro/model/structure/my_time.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/manager_activity_notifier.dart';
 import 'package:wilpro/service/notifier/settings_notifier.dart';
@@ -27,6 +28,7 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
   final settingsNotifier = SettingsNotifier.instance;
   // controller text
   final titleController = TextEditingController();
+  final lang = Langue.instance;
   @override
   void initState() {
     super.initState();
@@ -52,7 +54,7 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
             width: 500,
             child: Column(
               children: [
-                MyWidgets.text(text: "Votre choix"),
+                MyWidgets.text(text: lang.yourchoice()),
                 Expanded(
                   child: ListenableBuilder(
                       listenable: managerActivityNotifier,
@@ -82,13 +84,13 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
                                     child: MyWidgets.simpleItemList(
                                         startText: listTasks[index].title,
                                         endText: listTasks[index].withTimer
-                                            ? "Avec chrono"
-                                            : "Sans chrono"),
+                                            ? lang.withTimer()
+                                            : lang.withoutTimer()),
                                   ),
                                 ),
                               )
                             : Center(
-                                child: MyWidgets.text(text: "Pas de tache"),
+                                child: MyWidgets.text(text: lang.empty()),
                               );
                       }),
                 ),
@@ -106,12 +108,15 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
     List<Quantity> tasks = managerActivityNotifier.editList;
     return Scaffold(
       appBar: AppBar(
+        leading: IconTheme(
+            data: IconThemeData(color: MyColors.black),
+            child: const BackButton()),
         title: Row(
           children: [
             Expanded(
                 child: Center(
                     child: MyWidgets.text(
-                        text: isAddView ? "Ajouter" : "Modifier",
+                        text: isAddView ? lang.add() : lang.edit(),
                         color: MyColors.black))),
             isAddView
                 ? const SizedBox()
@@ -139,28 +144,46 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
                 builder: (context, child) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      MyWidgets.text(text: "Titre", color: MyColors.black),
+                      MyWidgets.text(text: lang.title(), color: MyColors.black),
                       Container(
                         margin: const EdgeInsets.only(bottom: 20),
                         child: TextFormField(
                           controller: titleController,
                           maxLength: 100,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: settingsNotifier.darkMode
+                                        ? Colors.white
+                                        : Colors.black)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: MyColors.green)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: settingsNotifier.darkMode
+                                        ? Colors.white
+                                        : Colors.black)),
                             counterText: "",
                           ),
+                          style: TextStyle(
+                              color: settingsNotifier.darkMode
+                                  ? Colors.white
+                                  : Colors.black),
                         ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           MyWidgets.text(
-                              text: "Liste des taches", color: MyColors.black),
+                              text: lang.taskList(), color: MyColors.black),
                           IconButton(
                             onPressed: () {
                               _showMyAddDialog();
                             },
-                            icon: Icon(Icons.add, color: MyColors.blue),
+                            icon: Icon(Icons.add,
+                                color: settingsNotifier.darkMode
+                                    ? Colors.white
+                                    : MyColors.blue),
                           )
                         ],
                       ),
@@ -173,12 +196,12 @@ class _ManagerActivityPage extends State<ManagerActivityPage> {
                               )
                             : Center(
                                 child: MyWidgets.text(
-                                    text: "Votre Activité n'a pas de taches",
+                                    text: lang.empty(),
                                     color: MyColors.black),
                               ),
                       ),
                       MyWidgets.button(
-                        text: "VALIDER",
+                        text: lang.validate(),
                         onTap: () {
                           final title = titleController.text;
                           final listTasks = managerActivityNotifier.editList;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/history_notifier.dart';
 import 'package:wilpro/ui/composants/item/history_item.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
@@ -16,6 +17,7 @@ class _HistorySection extends State<HistorySection> {
   Widget build(BuildContext context) {
     final notifier = HistoryNotifier.instance;
     final listHistory = notifier.getHistorical;
+    final lang = Langue.instance;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(10),
@@ -25,7 +27,7 @@ class _HistorySection extends State<HistorySection> {
         builder: (context, child) => Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            MyWidgets.text(text: "Historique", color: MyColors.black),
+            MyWidgets.text(text: lang.history(), color: MyColors.black),
             Expanded(
               child: listHistory.isNotEmpty
                   ? ListView.builder(
@@ -34,7 +36,7 @@ class _HistorySection extends State<HistorySection> {
                           HistoryItem(item: listHistory[index]))
                   : Center(
                       child: MyWidgets.text(
-                          text: "Pas d'historique", color: MyColors.black)),
+                          text: lang.empty(), color: MyColors.black)),
             )
           ],
         ),

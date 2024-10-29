@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
@@ -15,6 +16,7 @@ class _TaskSubSection extends State<TaskSubSection> {
   final newTaskController = TextEditingController();
   // notifier
   final notifier = TaskNotifier.instance;
+  final lang = Langue.instance;
 
   @override
   void dispose() {
@@ -46,11 +48,11 @@ class _TaskSubSection extends State<TaskSubSection> {
                   items: [
                     DropdownMenuItem(
                       value: true,
-                      child: MyWidgets.text(text: "AVEC chrno"),
+                      child: MyWidgets.text(text: lang.withTimer()),
                     ),
                     DropdownMenuItem(
                       value: false,
-                      child: MyWidgets.text(text: "SANS chrno"),
+                      child: MyWidgets.text(text: lang.withoutTimer()),
                     ),
                   ],
                   onChanged: (value) {
@@ -70,7 +72,7 @@ class _TaskSubSection extends State<TaskSubSection> {
           ),
           actions: <Widget>[
             MyWidgets.button(
-              text: "VALIDER",
+              text: lang.validate(),
               onTap: () {
                 Navigator.of(context).pop();
                 final title = newTaskController.text.trim();
@@ -112,17 +114,17 @@ class _TaskSubSection extends State<TaskSubSection> {
                           child: MyWidgets.simpleItemList(
                               startText: tasks[index].title,
                               endText: tasks[index].withTimer
-                                  ? "Avec chrono"
-                                  : "Sans chrono"),
+                                  ? lang.withTimer()
+                                  : lang.withoutTimer()),
                         ),
                       )
                     : Center(
                         child: MyWidgets.text(
-                            text: "Pas de tache", color: MyColors.black),
+                            text: lang.empty(), color: MyColors.black),
                       ),
               ),
               MyWidgets.button(
-                text: "AJOUTER",
+                text: lang.add(),
                 onTap: () {
                   _showMyDialog();
                 },

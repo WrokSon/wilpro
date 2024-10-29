@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/page/sections/creationSubSection/activity_sub_section.dart';
 import 'package:wilpro/ui/page/sections/creationSubSection/task_sub_section.dart';
@@ -30,9 +31,10 @@ class _CreationSection extends State<CreationSection> {
 
   // selection du choix d'affichage
   Row top() {
+    final lang = Langue.instance;
     return Row(
       children: [
-        textButton(text: "Activités", index: 0),
+        textButton(text: lang.activities(), index: 0),
         // separateur
         Center(
           child: Container(
@@ -41,7 +43,7 @@ class _CreationSection extends State<CreationSection> {
             color: MyColors.black,
           ),
         ),
-        textButton(text: "Taches", index: 1),
+        textButton(text: lang.tasks(), index: 1),
       ],
     );
   }

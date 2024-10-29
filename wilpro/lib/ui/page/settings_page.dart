@@ -14,7 +14,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPage extends State<SettingsPage> {
-  LangageEnum langage = LangageEnum.french;
   final notifier = SettingsNotifier.instance;
   @override
   Widget build(BuildContext context) {
@@ -23,6 +22,9 @@ class _SettingsPage extends State<SettingsPage> {
         title: MyWidgets.text(text: "Paramettre", color: MyColors.black),
         centerTitle: true,
         backgroundColor: MyColors.background,
+        leading: IconTheme(
+            data: IconThemeData(color: MyColors.black),
+            child: const BackButton()),
       ),
       backgroundColor: MyColors.background,
       body: Container(
@@ -160,7 +162,7 @@ class _SettingsPage extends State<SettingsPage> {
               Expanded(
                 child: SizedBox(
                   child: DropdownButtonFormField<LangageEnum>(
-                    value: langage,
+                    value: notifier.language,
                     items: [
                       DropdownMenuItem<LangageEnum>(
                         value: LangageEnum.french,
@@ -173,7 +175,7 @@ class _SettingsPage extends State<SettingsPage> {
                     ],
                     onChanged: (value) {
                       setState(() {
-                        langage = value!;
+                        notifier.language = value!;
                       });
                     },
                   ),

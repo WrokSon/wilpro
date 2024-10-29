@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:wilpro/model/enum/langage_enum.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/history_notifier.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
@@ -13,6 +14,7 @@ class SettingsNotifier with ChangeNotifier {
   bool _autoSaveHistory = true;
   bool _playSound = true;
   bool _darkMode = false;
+  LangageEnum _langue = LangageEnum.french;
 
   SettingsNotifier._();
   void init() {}
@@ -43,6 +45,13 @@ class SettingsNotifier with ChangeNotifier {
 
   set autoSaveHistory(bool value) {
     _autoSaveHistory = value;
+    notifyListeners();
+  }
+
+  LangageEnum get language => _langue;
+
+  set language(LangageEnum value) {
+    _langue = value;
     notifyListeners();
   }
 
