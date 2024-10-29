@@ -6,6 +6,7 @@ import 'package:wilpro/model/structure/music_player.dart';
 import 'package:wilpro/model/structure/my_time.dart';
 import 'package:wilpro/model/structure/my_timer.dart';
 import 'package:wilpro/model/task.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/history_notifier.dart';
 import 'package:wilpro/service/notifier/settings_notifier.dart';
@@ -36,6 +37,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
   late DateTime beginActivity;
   late MyTimer globalTimer;
   late MyTimer taskTimer;
+  final lang = Langue.instance;
   // final notif = MyNotification();
 
   _RunningActivityPage() {
@@ -103,7 +105,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
             const SizedBox(height: 3),
             isFinish
                 ? MyWidgets.button(
-                    text: "Terminer",
+                    text: lang.finish(),
                     onTap: endActivity,
                     width: double.infinity,
                   )
@@ -138,7 +140,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                         ? const SizedBox()
                         : Expanded(
                             child: MyWidgets.button(
-                              text: "FINI",
+                              text: lang.done(),
                               onTap: () {
                                 if (isFinish) return;
                                 setState(() {
@@ -155,7 +157,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: MyWidgets.button(
-                        text: "PASSER",
+                        text: lang.skip(),
                         onTap: () {
                           if (isFinish) return;
                           setState(() {
@@ -235,7 +237,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
             flex: 5,
             child: MyWidgets.button(
               isEnabled: lockButtonDown,
-              text: isPause ? "REPRENDRE" : "PAUSE",
+              text: isPause ? lang.play() : lang.pause(),
               onTap: () {
                 if (isPause) {
                   globalTimer.startTimer(resets: false);
@@ -274,7 +276,7 @@ class _RunningActivityPage extends State<RunningActivityPage> {
             flex: 5,
             child: MyWidgets.button(
               isEnabled: lockButtonDown,
-              text: "ARRETER",
+              text: lang.stop(),
               onTap: () {
                 endActivity();
               },

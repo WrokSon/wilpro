@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:wilpro/model/enum/langage_enum.dart';
+import 'package:wilpro/model/history.dart';
+import 'package:wilpro/model/shared_preference.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/history_notifier.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
@@ -11,18 +13,28 @@ class SettingsNotifier with ChangeNotifier {
   final _historyNotifier = HistoryNotifier.instance;
   final _activityNotifier = ActivityNotifier.instance;
   final _taskNotifier = TaskNotifier.instance;
+  final sharedPreference = SharedPreference();
   bool _autoSaveHistory = true;
   bool _playSound = true;
   bool _darkMode = false;
   LangageEnum _langue = LangageEnum.french;
 
   SettingsNotifier._();
-  void init() {}
+  Future<List<History>> init() async {
+    _autoSaveHistory = await sharedPreference.getAutoSaveHistory();
+    _playSound = await sharedPreference.getIsMusic();
+    _darkMode = await sharedPreference.getThemeIsDark();
+    final lang = await sharedPreference.getlangue();
+    _langue = lang == "en" ? LangageEnum.english : LangageEnum.french;
+    notifyListeners();
+    return _historyNotifier.init();
+  }
 
   bool get playSound => _playSound;
 
   set playSound(bool value) {
     _playSound = value;
+    sharedPreference.setIsMusic(value);
     notifyListeners();
   }
 
@@ -31,6 +43,7 @@ class SettingsNotifier with ChangeNotifier {
   set darkMode(bool value) {
     // ici faire le changement de la couleur
     _darkMode = value;
+    sharedPreference.setThemeIsDark(value);
     if (value) {
       MyColors.background = Colors.black;
       MyColors.black = Colors.white;
@@ -45,6 +58,7 @@ class SettingsNotifier with ChangeNotifier {
 
   set autoSaveHistory(bool value) {
     _autoSaveHistory = value;
+    sharedPreference.setAutoSaveHistory(value);
     notifyListeners();
   }
 
@@ -52,6 +66,7 @@ class SettingsNotifier with ChangeNotifier {
 
   set language(LangageEnum value) {
     _langue = value;
+    sharedPreference.setlangue(value.value);
     notifyListeners();
   }
 

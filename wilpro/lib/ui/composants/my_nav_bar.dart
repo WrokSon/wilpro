@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/service/langue.dart';
+import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 
 class MyNavBar extends StatefulWidget {
@@ -62,30 +63,36 @@ class _MyNavBar extends State<MyNavBar> {
     double deviceWidth(BuildContext context) =>
         MediaQuery.of(context).size.width;
     final lang = Langue.instance;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: deviceWidth(context) * 0.1),
-      height: screenHeight * 0.08,
-      color: MyColors.backgroundNavBar,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          navBarItem(
-              icon: Icons.edit,
-              index: 0,
-              label: lang.creation(),
-              size: screenHeight * 0.025),
-          navBarItem(
-              icon: Icons.home,
-              index: 1,
-              label: lang.home(),
-              size: screenHeight * 0.025),
-          navBarItem(
-              icon: Icons.bookmark,
-              index: 2,
-              label: lang.history(),
-              size: screenHeight * 0.025),
-        ],
-      ),
-    );
+    final settingsNotifier = SettingsNotifier.instance;
+    return ListenableBuilder(
+        listenable: settingsNotifier,
+        builder: (context, child) {
+          return Container(
+            padding:
+                EdgeInsets.symmetric(horizontal: deviceWidth(context) * 0.1),
+            height: screenHeight * 0.08,
+            color: MyColors.backgroundNavBar,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                navBarItem(
+                    icon: Icons.edit,
+                    index: 0,
+                    label: lang.creation(),
+                    size: screenHeight * 0.025),
+                navBarItem(
+                    icon: Icons.home,
+                    index: 1,
+                    label: lang.home(),
+                    size: screenHeight * 0.025),
+                navBarItem(
+                    icon: Icons.bookmark,
+                    index: 2,
+                    label: lang.history(),
+                    size: screenHeight * 0.025),
+              ],
+            ),
+          );
+        });
   }
 }

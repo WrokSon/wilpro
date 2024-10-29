@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/activity_notifier.dart';
 import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/ui/composants/item/activity_item.dart';
@@ -17,6 +18,7 @@ class StartActyvityPage extends StatefulWidget {
 class _StartActyvityPage extends State<StartActyvityPage> {
   int ativitySelected = -1;
   final settingsNotifier = SettingsNotifier.instance;
+  final lang = Langue.instance;
   @override
   Widget build(BuildContext context) {
     final notifier = ActivityNotifier.instance;
@@ -24,7 +26,7 @@ class _StartActyvityPage extends State<StartActyvityPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.background,
-        title: MyWidgets.text(text: "Choisi l'actvité", color: MyColors.black),
+        title: MyWidgets.text(text: lang.yourchoice(), color: MyColors.black),
         centerTitle: true,
       ),
       body: ListenableBuilder(
@@ -64,12 +66,12 @@ class _StartActyvityPage extends State<StartActyvityPage> {
                             )
                           : Center(
                               child: MyWidgets.text(
-                                  text: "Pas d'activité",
+                                  text: lang.empty(),
                                   color: MyColors.black),
                             ),
                     ),
                     MyWidgets.button(
-                        text: "LANCER",
+                        text: lang.launch(),
                         isEnabled: ativitySelected != -1,
                         onTap: () {
                           if (ativitySelected != -1) {

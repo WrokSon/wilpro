@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wilpro/model/quantity.dart';
 import 'package:wilpro/model/structure/my_time.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/manager_activity_notifier.dart';
 import 'package:wilpro/service/notifier/task_notifier.dart';
 import 'package:wilpro/service/tools.dart';
@@ -22,6 +23,7 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
   final hourController = TextEditingController();
   final minuteController = TextEditingController();
   final secondeController = TextEditingController();
+  final lang = Langue.instance;
 
   @override
   void dispose() {
@@ -46,7 +48,7 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
           ),
           actions: [
             MyWidgets.button(
-              text: "CHANGER",
+              text: lang.validate(),
               onTap: () {
                 if (keyForm.currentState!.validate()) {
                   managerActivityNotifier.editToeditActivityList(
@@ -103,7 +105,7 @@ class _TaskInActivityItem extends State<TaskInActivityItem> {
           ),
           actions: [
             MyWidgets.button(
-              text: "CHANGER",
+              text: lang.validate(),
               onTap: () {
                 // Todo: probleme au niveau des champs
                 if (keyForm.currentState!.validate()) {

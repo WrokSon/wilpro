@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wilpro/model/enum/format_time_enum.dart';
 import 'package:wilpro/model/enum/key_api.dart';
 import 'package:wilpro/model/structure/my_gps.dart';
+import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/service/tools.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_image.dart';
@@ -21,12 +22,13 @@ class _MyMeteo extends State<MyMeteo> {
   double? degres;
   String description = "...";
   String? _city;
+  String lang = "fr";
 
   Future<void> _getMeteo() async {
     try {
       final position = await MyGps.instance.getCurrentLocation();
       final apiUrl =
-          "https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${KeyApi.meteo.value}&units=metric&lang=fr";
+          "https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${KeyApi.meteo.value}&units=metric&lang=$lang";
 
       final reponse = await http.get(Uri.parse(apiUrl));
 
@@ -52,50 +54,59 @@ class _MyMeteo extends State<MyMeteo> {
 
   @override
   Widget build(BuildContext context) {
+    final notifier = SettingsNotifier.instance;
+    lang = notifier.language.value;
     return GestureDetector(
       onTap: () {
         setState(() {
           _getMeteo();
         });
       },
-      child: Card(
-        elevation: 10,
-        color: MyColors.backgroundNavBar,
-        child: Container(
-          margin: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              MyWidgets.text(
-                  text: Tools.timeString2(DateTime.now(),
-                      format: FormatTimeEnum.hhmmss),
-                  size: 30),
-              _city == null ? const SizedBox() : MyWidgets.text(text: _city!),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: MyImage.network(Tools.getURLImageMeteo(_idIcon)),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      MyWidgets.text(
-                          text: degres == null
-                              ? "???°C"
-                              : '${degres!.toInt()}°C'),
-                      MyWidgets.text(text: description),
-                    ],
-                  )
-                ],
+      child: ListenableBuilder(
+          listenable: notifier,
+          builder: (context, child) {
+            return Card(
+              elevation: 10,
+              color: MyColors.backgroundNavBar,
+              child: Container(
+                margin: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    MyWidgets.text(
+                        text: Tools.timeString2(DateTime.now(),
+                            format: FormatTimeEnum.hhmmss),
+                        size: 30),
+                    _city == null
+                        ? const SizedBox()
+                        : MyWidgets.text(text: _city!),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 100,
+                          width: 100,
+                          child:
+                              MyImage.network(Tools.getURLImageMeteo(_idIcon)),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            MyWidgets.text(
+                                text: degres == null
+                                    ? "???°C"
+                                    : '${degres!.toInt()}°C'),
+                            MyWidgets.text(text: description),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 }

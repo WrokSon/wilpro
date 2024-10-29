@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wilpro/model/enum/langage_enum.dart';
+import 'package:wilpro/service/langue.dart';
 import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
@@ -15,11 +16,12 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPage extends State<SettingsPage> {
   final notifier = SettingsNotifier.instance;
+  final lang = Langue.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: MyWidgets.text(text: "Paramettre", color: MyColors.black),
+        title: MyWidgets.text(text: lang.settings(), color: MyColors.black),
         centerTitle: true,
         backgroundColor: MyColors.background,
         leading: IconTheme(
@@ -45,7 +47,7 @@ class _SettingsPage extends State<SettingsPage> {
                     ),
                   ),
                   MyWidgets.button(
-                    text: "A propos de nous",
+                    text: lang.aboutUs(),
                     width: double.infinity,
                     onTap: () {
                       _showMyAboutUsDialog();
@@ -72,7 +74,7 @@ class _SettingsPage extends State<SettingsPage> {
               Expanded(
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  child: MyWidgets.text(text: "Sombre", size: 10),
+                  child: MyWidgets.text(text: lang.dark(), size: 10),
                 ),
               ),
               Expanded(
@@ -101,7 +103,7 @@ class _SettingsPage extends State<SettingsPage> {
       color: MyColors.backgroundNavBar,
       child: Column(
         children: [
-          Center(child: MyWidgets.text(text: "Historique", isBold: true)),
+          Center(child: MyWidgets.text(text: lang.history(), isBold: true)),
           const SizedBox(height: 10),
           // sauvegarde automatique
           Row(
@@ -109,7 +111,7 @@ class _SettingsPage extends State<SettingsPage> {
               Expanded(
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  child: MyWidgets.text(text: "Sauvegarde auto", size: 10),
+                  child: MyWidgets.text(text: lang.autoSave(), size: 10),
                 ),
               ),
               Expanded(
@@ -128,7 +130,7 @@ class _SettingsPage extends State<SettingsPage> {
           ),
           const SizedBox(height: 10),
           MyWidgets.button(
-            text: "VIDER",
+            text: lang.clean(),
             color: MyColors.red,
             width: double.infinity,
             height: 30,
@@ -149,7 +151,7 @@ class _SettingsPage extends State<SettingsPage> {
       color: MyColors.backgroundNavBar,
       child: Column(
         children: [
-          Center(child: MyWidgets.text(text: "Autres", isBold: true)),
+          Center(child: MyWidgets.text(text: lang.others(), isBold: true)),
           const SizedBox(height: 10),
           Row(
             children: [
@@ -185,7 +187,7 @@ class _SettingsPage extends State<SettingsPage> {
           ),
           const SizedBox(height: 10),
           MyWidgets.button(
-            text: "REINITILISER",
+            text: lang.reset(),
             color: MyColors.red,
             width: double.infinity,
             height: 30,
@@ -205,14 +207,14 @@ class _SettingsPage extends State<SettingsPage> {
       color: MyColors.backgroundNavBar,
       child: Column(
         children: [
-          Center(child: MyWidgets.text(text: "Musique", isBold: true)),
+          Center(child: MyWidgets.text(text: lang.music(), isBold: true)),
           const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  child: MyWidgets.text(text: "sons", size: 10),
+                  child: MyWidgets.text(text: lang.sound(), size: 10),
                 ),
               ),
               Expanded(
@@ -249,10 +251,7 @@ class _SettingsPage extends State<SettingsPage> {
                 Center(child: MyWidgets.text(text: "Wil-Pro", isBold: true)),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 15),
-                  child: MyWidgets.text(
-                      size: 13,
-                      text:
-                          "Je suis un étudiant en deuxième année de Master à Orleans. Je code des applications gratuites afin de répondre à un besoin ou des demandes. Je travaille tout seul donc s’il y a des améliorations que vous voulez voir sur cette application faite le moi savoir et je me pencherai sur cette amélioration durant mes temps libres."),
+                  child: MyWidgets.text(size: 13, text: lang.textAboutUs()),
                 ),
                 MyWidgets.text(
                     text: "Contact : deliremassam@gmail.com", size: 13),

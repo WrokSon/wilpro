@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:backdrop/backdrop.dart';
-import 'package:wilpro/service/notifier/history_notifier.dart';
+import 'package:wilpro/service/langue.dart';
+import 'package:wilpro/service/notifier/settings_notifier.dart';
 import 'package:wilpro/ui/composants/my_colors.dart';
 import 'package:wilpro/ui/composants/my_nav_bar.dart';
 import 'package:wilpro/ui/composants/my_widgets.dart';
@@ -77,7 +78,7 @@ class _SectionPage extends State<SectionPage> {
 
   // popup pour ajouter
   Future<void> _showMyLoadingDialog() async {
-    final history = HistoryNotifier.instance;
+    final notifier = SettingsNotifier.instance;
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
@@ -87,7 +88,7 @@ class _SectionPage extends State<SectionPage> {
             height: 100,
             width: 100,
             child: FutureBuilder(
-                future: history.init(),
+                future: notifier.init(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     isReady = true;
@@ -99,7 +100,7 @@ class _SectionPage extends State<SectionPage> {
                     children: [
                       const CircularProgressIndicator(),
                       const SizedBox(height: 15),
-                      MyWidgets.text(text: "Chargement des données"),
+                      MyWidgets.text(text: Langue.instance.loading()),
                     ],
                   );
                 }),
