@@ -17,10 +17,16 @@ une application Flutter qui permet de mieux s'organiser
 ## API utilisé
 - Google Maps => pour la carte
 - openweathermap => pour la meteo
-- geocoder2 => pour recuperer le cordonnées et verifier une addresse
+- geolocator => pour recuperer le cordonnées et verifier une addresse
 
 ## Dependances
-- cached_network_image: ^3.3.1
-- flutter_map: ^3.0.0
-- http: ^0.13.6
-- uuid: ^4.4.0
+- cupertino_icons: ^1.0.8
+- backdrop: ^0.9.1
+- flutter_map: ^7.0.2
+- latlong2: ^0.9.1
+- cached_network_image: ^3.4.1
+- uuid: ^4.4.2
+- http: ^1.2.2
+- geolocator: ^13.0.1
+- sqflite_common: ^2.5.4+5
+- path: ^1.9.0
